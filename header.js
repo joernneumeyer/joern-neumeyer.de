@@ -53,11 +53,22 @@ document.addEventListener('DOMContentLoaded', function(){
     listItem.id = 'nav-link-' + page;
     listItem.addEventListener('click', clickHandlerFactory(page));
     return listItem;
-  }
+  };
+
+  var makeSpacingSpan = function() {
+    var span = document.createElement('span');
+    span.innerHTML = '&nbsp;';
+    return span;
+  };
 
   pages
     .map(mapPageTitleToLink)
-    .forEach(headerList.appendChild.bind(headerList));
+    .forEach(function(link, i) {
+      headerList.appendChild(link);
+      if (i < pages.length - 1) {
+        headerList.appendChild(makeSpacingSpan());
+      }
+    });
 
   var linkId = 'nav-link-' + (getPageFragment() || 'home');
   document.getElementById(linkId).click();
