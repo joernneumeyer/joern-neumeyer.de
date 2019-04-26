@@ -19,13 +19,20 @@
 BLOCK_COMMENT
 
 build-article() {
-  cd articles
-  latex $1.tex && dvips $1.dvi -Ppdf && ps2pdf $1.ps
-  rm $1.aux $1.dvi $1.log $1.ps
+  article=$1
+  cd articles/${article}
+  latex ${article}.tex && dvips ${article}.dvi -Ppdf && ps2pdf ${article}.ps
+  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc texput.log")
+  for item in ${remove_list}
+  do
+    if [[ -f ${item} ]]
+    then
+      rm ${item}
+    fi
+  done
 }
 
-ARTICLES=$(ls articles | grep .tex)
-ARTICLES=${ARTICLES::-4}
+ARTICLES=$(ls articles)
 
 for ARTICLE in ${ARTICLES}
 do
