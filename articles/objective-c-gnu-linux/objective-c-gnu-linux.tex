@@ -1,0 +1,97 @@
+\documentclass{article}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{courier}
+\usepackage[left=10px,right=10px,top=10px,bottom=10px,paperwidth=6in,paperheight=23in]{geometry}
+
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+
+\title{How to compile Objective-C code on GNU/Linux base operating systems}
+\author{J\"orn Neumeyer}
+
+\definecolor{darkturquoise}{rgb}{0.0, 0.81, 0.82}
+\definecolor{gray}{rgb}{0.5, 0.5, 0.5}
+\definecolor{bostonuniversityred}{rgb}{0.8, 0.0, 0.0}
+\definecolor{orangepeel}{rgb}{1.0, 0.62, 0.0}
+
+\lstset{
+  basicstyle=\ttfamily,
+  language={[Objective]C},
+  numbers=left,
+  numbersep=0pt,
+  title=\lstname,
+  stringstyle=\color{red},
+  showspaces=false,
+  showstringspaces=false,
+  morecomment=[l][\color{magenta}]{\#},
+  directivestyle=\color{green},
+  commentstyle=\color{gray},
+  classoffset=0,
+  morekeywords={@property,@synthesize,super},
+  keywordstyle=\color{blue},
+  classoffset=1,
+  morekeywords={NSString,Foo,NSAutoreleasePool,NSObject},
+  keywordstyle=\color{orangepeel},
+  classoffset=2,
+  morekeywords={NSLog},
+  keywordstyle=\color{darkturquoise},
+  classoffset=3,
+  morekeywords={new},
+  keywordstyle=\color{bostonuniversityred}
+}
+
+\begin{document}
+  \maketitle
+  % \tableofcontents
+  \section{Required Packages}
+  \begin{itemize}
+    \item clang
+    \item gnustep-make
+    \item gnustep-devel
+  \end{itemize}
+  \section{Sample Code}
+  The rest of the article will be based on the following source code files:
+  \begin{itemize}
+    \item main.m - The main file of the executable
+    \item Foo.h - The header of the Foo library we build
+    \item Foo.m - The implementation of the Foo library
+  \end{itemize}
+  The actual source code is appended at the end of this article.
+  \subsection{Boilerplate Code}
+  There is a little bit of boilerplate code in the main function.
+  Namely the creation of an \textbf{NSAutoreleasePool} instance and the call of its \textbf{drain} method.
+  \begin{lstlisting}
+    NSAutoreleasePool* pool = NSAutoreleasePool.new; // line 5
+    [pool drain]; // line 11
+  \end{lstlisting}
+  These lines can also be omitted, but that will lead to a large number of logging in your console as you run your code.
+  \section{Building}
+  It does not take much to compile an Objective-C file.
+  Using clang, the command looks like the following:
+  \begin{lstlisting}[language=bash]
+    clang $(gnustep-config --objc-flags) $(gnustep-config --base-libs) main.m
+  \end{lstlisting}
+  \subsection{Building with make}
+  In my experience building with make does not work - sort of.
+  As seen in the above section, we retrieve a bunch of compiler flags through gnustep-config.
+  For some reason gnustep-config would not produce any output when run inside a Makefile.
+  Therefore, I use a bash helper to retrieve the compiler flags and pass them to my Makefile.
+  So, the important line of my build helper - build.sh - looks like this:
+  \begin{lstlisting}[language=bash]
+    make FLAGS="$(gnustep-config --objc-flags) $(gnustep-config --base-libs)"
+  \end{lstlisting}
+  Now we can easily consume the passed FLAGS variable in our Makefile:
+  \begin{lstlisting}[language=make]
+    main: main.m Foo.o
+    clang $(FLAGS) main.m Foo.o -o main
+    
+    foo: Foo.h Foo.m
+    clang $(FLAGS) Foo.m -c -o Foo.o
+  \end{lstlisting}
+  After enabling script execution - chmod +x build.sh - we can run our build script via ./build.sh and our code compiles successfully via make.
+  \section{Source File Content}
+  \lstinputlisting[frame=single]{Foo.h}
+  \lstinputlisting[frame=single]{Foo.m}
+  \lstinputlisting[frame=single]{main.m}
+\end{document}
