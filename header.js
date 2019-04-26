@@ -47,6 +47,7 @@
     var listItem = document.createElement('li');
     listItem.appendChild(span);
     listItem.className += 'badge clickable';
+    listItem.id = 'nav-link-' + page;
     listItem.addEventListener('click', clickHandlerFactory(page));
     headerList.appendChild(listItem);
   });
