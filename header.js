@@ -17,7 +17,7 @@
  * along with joern-neumeyer.de. If not, see <https://www.gnu.org/licenses/>.
 */
 
-(function(){
+document.addEventListener('DOMContentLoaded', function(){
   var headerList = document.getElementById('header-list');
   var pages = ['home', 'contact'];
   var mainElement = document.getElementsByTagName('main')[0];
@@ -62,4 +62,4 @@
   var linkId = 'nav-link-' + (getPageFragment() || 'home');
   document.getElementById(linkId).click();
   initialLoad = false;
-})();
+});
