@@ -32,3 +32,7 @@
     headerElement.innerHTML = html;
   });
 })();
+
+function upperCaseFirst(text) {
+  return text[0].toUpperCase() + text.substring(1);
+}
