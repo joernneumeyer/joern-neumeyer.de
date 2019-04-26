@@ -39,3 +39,11 @@
 function upperCaseFirst(text) {
   return text[0].toUpperCase() + text.substring(1);
 }
+
+function getPageFragment() {
+  return window.location.hash.substring(1);
+}
+
+function setPageFragment(fragment) {
+  window.location.hash = '#' + fragment;
+}
