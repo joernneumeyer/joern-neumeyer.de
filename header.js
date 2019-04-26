@@ -20,13 +20,26 @@
 (function(){
   var headerList = document.getElementById('header-list');
   var pages = ['home'];
+  var mainElement = document.getElementsByTagName('main')[0];
+
+  var clickHandlerFactory = function(path) {
+    return function() {
+      fetch(path).then(function(response) {
+        return response.text();
+      }).then((html) => {
+        mainElement.innerHTML = html;
+      });
+    };
+  };
+
   pages.forEach(function(page) {
-    var pageParts = page.split(' ');
-    var anchor = document.createElement('a');
-    anchor.innerText = pageParts.map(upperCaseFirst).join('');
+    var pageParts = page.split('-');
+    var span = document.createElement('span');
+    span.innerText = pageParts.map(upperCaseFirst).join('');
     var listItem = document.createElement('li');
-    listItem.appendChild(anchor);
-    listItem.className += 'badge';
+    listItem.appendChild(span);
+    listItem.className += 'badge clickable';
+    listItem.addEventListener('click', clickHandlerFactory(page + '.html'));
     headerList.appendChild(listItem);
   });
 })();
