@@ -40,7 +40,7 @@
     };
   };
 
-  pages.forEach(function(page) {
+  var mapPageTitleToLink = function(page) {
     var pageParts = page.split('-');
     var span = document.createElement('span');
     span.innerText = pageParts.map(upperCaseFirst).join('');
@@ -49,6 +49,12 @@
     listItem.className += 'badge clickable';
     listItem.id = 'nav-link-' + page;
     listItem.addEventListener('click', clickHandlerFactory(page));
-    headerList.appendChild(listItem);
-  });
+    return listItem;
+  }
+
+  pages
+    .map(mapPageTitleToLink)
+    .forEach(function(item) {
+      headerList.appendChild(item);
+    });
 })();
