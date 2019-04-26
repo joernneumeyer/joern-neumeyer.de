@@ -30,6 +30,9 @@
     return response.text();
   }).then((html) => {
     headerElement.innerHTML = html;
+    fetch('header.js').then(function(response) {
+      return response.text()
+    }).then(eval);
   });
 })();
 
