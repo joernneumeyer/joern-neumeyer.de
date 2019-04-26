@@ -26,7 +26,7 @@
     anchor.innerText = pageParts.map(upperCaseFirst).join('');
     var listItem = document.createElement('li');
     listItem.appendChild(anchor);
-    listItem.classname += 'badge';
+    listItem.className += 'badge';
     headerList.appendChild(listItem);
   });
 })();
