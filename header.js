@@ -19,7 +19,7 @@
 
 document.addEventListener('DOMContentLoaded', function(){
   var headerList = document.getElementById('header-list');
-  var pages = ['home', 'contact'];
+  var pages = ['home', 'articles', 'contact'];
   var mainElement = document.getElementsByTagName('main')[0];
   var initialLoad = true;
 
