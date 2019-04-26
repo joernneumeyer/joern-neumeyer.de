@@ -19,13 +19,15 @@
 
 (function(){
   var headerList = document.getElementById('header-list');
-  var pages = ['home'];
+  var pages = ['home', 'contact'];
   var mainElement = document.getElementsByTagName('main')[0];
   var initialLoad = true;
 
   var clickHandlerFactory = function(page) {
     return function() {
       if (page === getPageFragment() && !initialLoad) return;
+      document.getElementById('nav-link-' + getPageFragment()).classList.remove('badge--success');
+      document.getElementById('nav-link-' + page).classList.add('badge--success');
       setPageFragment(page);
       fetch('pages/' + page + '.html').then(function(response) {
         return response.text();
@@ -46,7 +48,8 @@
     span.innerText = pageParts.map(upperCaseFirst).join('');
     var listItem = document.createElement('li');
     listItem.appendChild(span);
-    listItem.className += 'badge clickable';
+    listItem.classList.add('badge');
+    listItem.classList.add('clickable');
     listItem.id = 'nav-link-' + page;
     listItem.addEventListener('click', clickHandlerFactory(page));
     return listItem;
