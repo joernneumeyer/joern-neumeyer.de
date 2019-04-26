@@ -27,11 +27,11 @@
     return function() {
       if (page === getPageFragment() && !initialLoad) return;
       setPageFragment(page);
-      fetch(page + '.html').then(function(response) {
+      fetch('pages/' + page + '.html').then(function(response) {
         return response.text();
       }).then(function(html) {
         mainElement.innerHTML = html;
-        fetch(page + '.js').then(function(response) {
+        fetch('pages/' + page + '.js').then(function(response) {
           return response.text();
         }).then(eval).catch(function(){
           console.info('did not find a script for page ' + page);
