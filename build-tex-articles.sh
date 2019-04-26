@@ -22,7 +22,7 @@ build-article() {
   article=$1
   cd articles/${article}
   latex ${article}.tex && dvips ${article}.dvi -Ppdf && ps2pdf ${article}.ps
-  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc texput.log")
+  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out texput.log")
   for item in ${remove_list}
   do
     if [[ -f ${item} ]]
