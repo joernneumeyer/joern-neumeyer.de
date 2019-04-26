@@ -21,12 +21,11 @@
   var headerList = document.getElementById('header-list');
   var pages = ['home'];
   var mainElement = document.getElementsByTagName('main')[0];
-  var currentPage = '';
 
   var clickHandlerFactory = function(page) {
     return function() {
-      if (page === currentPage) return;
-      currentPage = page;
+      if (page === getPageFragment()) return;
+      setPageFragment(page);
       fetch(page + '.html').then(function(response) {
         return response.text();
       }).then(function(html) {
@@ -54,7 +53,5 @@
 
   pages
     .map(mapPageTitleToLink)
-    .forEach(function(item) {
-      headerList.appendChild(item);
-    });
+    .forEach(headerList.appendChild.bind(headerList));
 })();
