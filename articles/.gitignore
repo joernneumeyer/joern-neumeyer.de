@@ -1,5 +1,5 @@
-.aux
-.dvi
-.log
-.pdf
-.ps
+*.aux
+*.dvi
+*.log
+*.pdf
+*.ps
