@@ -29,7 +29,7 @@
       currentPage = page;
       fetch(page + '.html').then(function(response) {
         return response.text();
-      }).then((html) => {
+      }).then(function(html) {
         mainElement.innerHTML = html;
         fetch(page + '.js').then(function(response) {
           return response.text();
