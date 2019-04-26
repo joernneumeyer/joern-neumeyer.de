@@ -21,13 +21,21 @@
   var headerList = document.getElementById('header-list');
   var pages = ['home'];
   var mainElement = document.getElementsByTagName('main')[0];
+  var currentPage = '';
 
-  var clickHandlerFactory = function(path) {
+  var clickHandlerFactory = function(page) {
     return function() {
-      fetch(path).then(function(response) {
+      if (page === currentPage) return;
+      currentPage = page;
+      fetch(page + '.html').then(function(response) {
         return response.text();
       }).then((html) => {
         mainElement.innerHTML = html;
+        fetch(page + '.js').then(function(response) {
+          return response.text();
+        }).then(eval).catch(function(){
+          console.info('did not find a script for page ' + page);
+        });
       });
     };
   };
@@ -39,7 +47,7 @@
     var listItem = document.createElement('li');
     listItem.appendChild(span);
     listItem.className += 'badge clickable';
-    listItem.addEventListener('click', clickHandlerFactory(page + '.html'));
+    listItem.addEventListener('click', clickHandlerFactory(page));
     headerList.appendChild(listItem);
   });
 })();
