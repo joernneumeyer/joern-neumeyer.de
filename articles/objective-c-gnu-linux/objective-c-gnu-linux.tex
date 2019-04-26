@@ -3,6 +3,7 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage{courier}
+\usepackage{hyperref}
 \usepackage[left=10px,right=10px,top=10px,bottom=10px,paperwidth=6in,paperheight=23in]{geometry}
 
 \lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
@@ -44,6 +45,9 @@
 \begin{document}
   \maketitle
   % \tableofcontents
+  \section{License}
+  This article is published and available under the Creative Commons Attribution 4.0 International License.\\
+  You may find this license under \url{https://creativecommons.org/licenses/by/4.0/}.
   \section{Required Packages}
   \begin{itemize}
     \item clang
@@ -85,7 +89,7 @@
   \begin{lstlisting}[language=make]
     main: main.m Foo.o
     clang $(FLAGS) main.m Foo.o -o main
-    
+
     foo: Foo.h Foo.m
     clang $(FLAGS) Foo.m -c -o Foo.o
   \end{lstlisting}
