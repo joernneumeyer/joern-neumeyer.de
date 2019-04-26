@@ -17,25 +17,6 @@
  * along with joern-neumeyer.de. If not, see <https://www.gnu.org/licenses/>.
 */
 
-(function() {
-  var footerElement = document.getElementsByTagName('footer')[0];
-  fetch('footer.html').then(function(response) {
-    return response.text();
-  }).then((html) => {
-    footerElement.innerHTML = html;
-  });
-
-  var headerElement = document.getElementsByTagName('header')[0];
-  fetch('header.html').then(function(response) {
-    return response.text();
-  }).then((html) => {
-    headerElement.innerHTML = html;
-    fetch('header.js').then(function(response) {
-      return response.text()
-    }).then(eval);
-  });
-})();
-
 function upperCaseFirst(text) {
   return text[0].toUpperCase() + text.substring(1);
 }
