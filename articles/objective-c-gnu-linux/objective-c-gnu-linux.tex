@@ -1,14 +1,14 @@
 \documentclass{article}
 
 \usepackage{listings}
+\usepackage{hyperref}
 \usepackage{color}
 \usepackage{courier}
-\usepackage{hyperref}
 \usepackage[left=10px,right=10px,top=10px,bottom=10px,paperwidth=6in,paperheight=23in]{geometry}
 
 \lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
 
-\title{How to compile Objective-C code on GNU/Linux base operating systems}
+\title{How to compile Objective-C code on GNU/Linux based operating systems}
 \author{J\"orn Neumeyer}
 
 \definecolor{darkturquoise}{rgb}{0.0, 0.81, 0.82}
@@ -44,15 +44,12 @@
 
 \begin{document}
   \maketitle
-  % \tableofcontents
-  \section{License}
-  This article is published and available under the Creative Commons Attribution 4.0 International License.\\
-  You may find this license under \url{https://creativecommons.org/licenses/by/4.0/}.
   \section{Required Packages}
   \begin{itemize}
     \item clang
     \item gnustep-make
     \item gnustep-devel
+    \item libobjc2 (from \url{https://github.com/gnustep/libobjc2})
   \end{itemize}
   \section{Sample Code}
   The rest of the article will be based on the following source code files:
@@ -94,6 +91,11 @@
     clang $(FLAGS) Foo.m -c -o Foo.o
   \end{lstlisting}
   After enabling script execution - chmod +x build.sh - we can run our build script via ./build.sh and our code compiles successfully via make.
+  \section{Copyright}
+  Copyright \textcopyright \enspace2019 J\"orn Neumeyer\\
+  Unless specified otherwise, the content of this article is licensed under the \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International Public License}.
+  You may modify, copy, distribute, and display this material, but you must give credit to the original authors. Please see the license for details.
+
   \section{Source File Content}
   \lstinputlisting[frame=single]{Foo.h}
   \lstinputlisting[frame=single]{Foo.m}
