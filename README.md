@@ -4,7 +4,7 @@ In case you want to check out some of my articles or get in touch you can just c
 
 ## Licensing
 All articles of my website are published under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
-All the code in this repository is licensed under [version 3 of the GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.html).
+All the code in this repository is licensed under [version 3 of the GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.html) (license code GPL-3.0-or-later).
 A copy of this license can be found in __LICENSE__.
 
 [![GPL-3.0 logo](https://www.gnu.org/graphics/gplv3-with-text-136x68.png)](https://www.gnu.org/licenses/gpl-3.0.html)
