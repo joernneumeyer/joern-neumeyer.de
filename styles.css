@@ -17,6 +17,10 @@
  * along with joern-neumeyer.de. If not, see <https://www.gnu.org/licenses/>.
 */
 
+.container {
+  font-size: 14pt;
+}
+
 main {
   text-align: justify;
 }
