@@ -69,3 +69,7 @@ footer {
 .bold {
   font-weight: bold;
 }
+
+.justify-text {
+  text-align: justify;
+}
