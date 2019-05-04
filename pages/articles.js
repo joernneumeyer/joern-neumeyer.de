@@ -31,16 +31,31 @@
   ];
 
   var renderArticle = function(article) {
-    var articleElement = document.createElement('li');
+    var articleElement = document.createElement('div');
+    articleElement.classList.add('row');
 
-    var articleHeading = document.createElement('h3');
+    var thumbnail = document.createElement('img');
+    thumbnail.alt = article.code;
+    thumbnail.src = 'articles/' + article.code + '/thumb.svg';
+
+    var thumbnailContainer = document.createElement('div');
+    thumbnailContainer.classList.add('col-sm-3');
+    thumbnailContainer.appendChild(thumbnail);
+
+    var articleTexts = document.createElement('div');
+    articleTexts.classList.add('col-sm-9');
+
+    var articleHeading = document.createElement('p');
     articleHeading.innerText = article.title;
 
     var articleDescription = document.createElement('p');
     articleDescription.innerText = article.description;
 
-    articleElement.appendChild(articleHeading);
-    articleElement.appendChild(articleDescription);
+    articleTexts.appendChild(articleHeading);
+    articleTexts.appendChild(articleDescription);
+
+    articleElement.appendChild(thumbnailContainer);
+    articleElement.appendChild(articleTexts);
 
     return articleElement;
   }
