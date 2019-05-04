@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function(){
       document.getElementById('nav-link-' + getPageFragment()).classList.remove('is-selected');
       document.getElementById('nav-link-' + page).classList.add('is-selected');
       setPageFragment(page);
-      setPageTitle(this.innerText + ' - Jörn Neumeyer');
+      setPageTitle(this.innerText + ' - J&ouml;rn Neumeyer');
       fetch('pages/' + page + '.html').then(function(response) {
         return response.text();
       }).then(function(html) {
