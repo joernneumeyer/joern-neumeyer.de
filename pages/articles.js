@@ -96,7 +96,9 @@
     articleTexts.appendChild(articleHeading);
     articleTexts.appendChild(articleDescription);
     articleTexts.appendChild(downloadLinks);
-    articleTexts.appendChild(otherArticleFiles);
+    if (article.related_files.length) {
+      articleTexts.appendChild(otherArticleFiles);
+    }
 
     articleElement.appendChild(thumbnailContainer);
     articleElement.appendChild(articleTexts);
