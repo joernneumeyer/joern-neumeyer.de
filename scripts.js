@@ -40,3 +40,8 @@ function createElementWithAttributes(elementName, attributes) {
   }
   return resultElement;
 }
+
+function clickNavItem(fragment) {
+  var linkId = 'nav-link-' + fragment;
+  document.getElementById(linkId).click();
+}
