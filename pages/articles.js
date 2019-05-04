@@ -24,7 +24,8 @@
     {
       title: 'How to compile Objective-C code on GNU/Linux based operating systems with GNUstep',
       code: 'objective-c-gnu-linux',
-      description: 'Did you ever want to play around with Objective-C but didn\'t how without a Mac? In this article I explain how I got Objective-C running on my machine using GNUstep.'
+      description: 'Did you ever want to play around with Objective-C but didn\'t how without a Mac? In this article I explain how I got Objective-C running on my machine using GNUstep.',
+      related_files: ['main.m', 'Foo.h', 'Foo.m', 'Makefile', 'build.sh']
     }
   ];
 
@@ -43,14 +44,59 @@
     var articleTexts = document.createElement('div');
     articleTexts.classList.add('col-sm-9');
 
-    var articleHeading = document.createElement('p');
-    articleHeading.innerText = article.title;
+    var articleHeading = createElementWithAttributes('span', {
+      innerText: article.title,
+      className: 'section-heading row col'
+    });
 
-    var articleDescription = document.createElement('p');
-    articleDescription.innerText = article.description;
+    var articleDescription = createElementWithAttributes('span', {
+      innerText: article.description,
+      className: 'row col'
+    });
+
+    var downloadLinks = createElementWithAttributes('span', {
+      innerHTML: 'Download links:&nbsp;',
+      className: 'row col',
+    });
+
+    var articleDownloadTex = createElementWithAttributes('a', {
+      target: '_blank',
+      rel: 'noreferrer',
+      innerText: 'Download LaTeX Source',
+      href: '/articles/' + article.code + '/' + article.code + '.tex',
+      className: 'button button--primary button--small',
+    });
+
+    var articleDownloadPdf = createElementWithAttributes('a', {
+      target: '_blank',
+      rel: 'noreferrer',
+      innerText: 'Download PDF',
+      href: '/articles/' + article.code + '/' + article.code + '.pdf',
+      className: 'button button--primary button--small',
+    });
+
+    var otherArticleFiles = createElementWithAttributes('span', {
+      innerHTML: 'Other article files:&nbsp;',
+      className: 'row col',
+    });
+
+    article.related_files.forEach(function(file) {
+      otherArticleFiles.appendChild(createElementWithAttributes('a', {
+        target: '_blank',
+        rel: 'noreferrer',
+        innerText: file,
+        href: '/articles/' + article.code + '/' + file,
+        className: 'button button--primary button--small',
+      }));
+    });
+
+    downloadLinks.appendChild(articleDownloadTex);
+    downloadLinks.appendChild(articleDownloadPdf);
 
     articleTexts.appendChild(articleHeading);
     articleTexts.appendChild(articleDescription);
+    articleTexts.appendChild(downloadLinks);
+    articleTexts.appendChild(otherArticleFiles);
 
     articleElement.appendChild(thumbnailContainer);
     articleElement.appendChild(articleTexts);
