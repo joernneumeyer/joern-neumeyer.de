@@ -17,6 +17,10 @@
  * along with joern-neumeyer.de. If not, see <https://www.gnu.org/licenses/>.
 */
 
+main {
+  text-align: justify;
+}
+
 .center-text {
   text-align: center;
 }
@@ -36,6 +40,14 @@ footer {
   position: fixed;
   align-content: center;
   width: 100%;
+}
+
+.chapter {
+  font-size: 2em;
+}
+
+.section {
+  font-size: 1.5em;
 }
 
 @media (max-width: 1000px) {
