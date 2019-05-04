@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', function(){
   var clickHandlerFactory = function(page) {
     return function() {
       if (page === getPageFragment() && !initialLoad) return;
-      document.getElementById('nav-link-' + getPageFragment()).classList.remove('badge--success');
-      document.getElementById('nav-link-' + page).classList.add('badge--success');
+      document.getElementById('nav-link-' + getPageFragment()).classList.remove('is-selected');
+      document.getElementById('nav-link-' + page).classList.add('is-selected');
       setPageFragment(page);
       fetch('pages/' + page + '.html').then(function(response) {
         return response.text();
@@ -44,15 +44,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
   var mapPageTitleToLink = function(page) {
     var pageParts = page.split('-');
-    var span = document.createElement('span');
-    span.innerText = pageParts.map(upperCaseFirst).join('');
-    var listItem = document.createElement('li');
-    listItem.appendChild(span);
-    listItem.classList.add('badge');
-    listItem.classList.add('clickable');
-    listItem.id = 'nav-link-' + page;
-    listItem.addEventListener('click', clickHandlerFactory(page));
-    return listItem;
+    var anchor = document.createElement('a');
+    anchor.innerText = pageParts.map(upperCaseFirst).join('');
+    anchor.classList.add('tabs-item');
+    anchor.classList.add('clickable');
+    anchor.id = 'nav-link-' + page;
+    anchor.addEventListener('click', clickHandlerFactory(page));
+    return anchor;
   };
 
   var makeSpacingSpan = function() {
