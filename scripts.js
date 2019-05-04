@@ -30,5 +30,5 @@ function setPageFragment(fragment) {
 }
 
 function setPageTitle(title) {
-  document.getElementsByTagName('title')[0].innerText = title;
+  document.getElementsByTagName('title')[0].innerHTML = title;
 }
