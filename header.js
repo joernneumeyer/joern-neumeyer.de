@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function(){
     anchor.innerText = pageParts.map(upperCaseFirst).join('');
     anchor.classList.add('tabs-item');
     anchor.classList.add('clickable');
+    anchor.classList.add('col');
     anchor.id = 'nav-link-' + page;
     anchor.addEventListener('click', clickHandlerFactory(page));
     return anchor;
