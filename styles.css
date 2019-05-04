@@ -47,3 +47,11 @@ footer {
     font-size: 26pt;
   }
 }
+
+.underline {
+  text-decoration: underline;
+}
+
+.bold {
+  font-weight: bold;
+}
