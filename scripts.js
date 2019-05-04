@@ -28,3 +28,7 @@ function getPageFragment() {
 function setPageFragment(fragment) {
   window.location.hash = '#' + fragment;
 }
+
+function setPageTitle(title) {
+  document.getElementsByTagName('title')[0].innerText = title;
+}
