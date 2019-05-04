@@ -30,6 +30,10 @@ build-article() {
       rm ${item}
     fi
   done
+  if [[ -f bundle-article.sh ]]
+  then
+    ./bundle-article.sh
+  fi
 }
 
 ARTICLES=$(ls articles)
