@@ -35,9 +35,17 @@ document.addEventListener('DOMContentLoaded', function(){
       }).then(function(html) {
         mainElement.innerHTML = html;
         fetch('pages/' + page + '.js').then(function(response) {
+          if (response.status === 404) {
+            throw undefined;
+          }
           return response.text();
-        }).then(eval).catch(function(){
-          console.info('did not find a script for page ' + page);
+        }).then(eval).catch(function(error){
+          if (error === undefined) {
+            console.info('did not find a script for page ' + page);
+          } else {
+            console.error('Error while loading script for "' + page + '"');
+            throw error;
+          }
         });
       });
     };
