@@ -34,7 +34,16 @@ footer {
   left: 0;
   bottom: 0;
   position: fixed;
-  text-align: center;
   align-content: center;
   width: 100%;
+}
+
+@media (max-width: 1000px) {
+  body {
+    font-size: 20pt;
+  }
+
+  header {
+    font-size: 26pt;
+  }
 }
