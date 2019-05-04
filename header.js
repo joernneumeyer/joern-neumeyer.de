@@ -70,6 +70,8 @@ document.addEventListener('DOMContentLoaded', function(){
       }
     });
 
+  setPageFragment(getPageFragment() || 'home');
+
   var linkId = 'nav-link-' + (getPageFragment() || 'home');
   document.getElementById(linkId).click();
   initialLoad = false;
