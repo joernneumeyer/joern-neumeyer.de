@@ -32,3 +32,11 @@ function setPageFragment(fragment) {
 function setPageTitle(title) {
   document.getElementsByTagName('title')[0].innerHTML = title;
 }
+
+function createElementWithAttributes(elementName, attributes) {
+  var resultElement = document.createElement(elementName);
+  for (var name in attributes) {
+    resultElement[name] = attributes[name];
+  }
+  return resultElement;
+}
