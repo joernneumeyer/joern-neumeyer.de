@@ -24,3 +24,17 @@
 .clickable {
   cursor: pointer;
 }
+
+header {
+  margin-top: -50pt;
+  font-size: 16pt;
+}
+
+footer {
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  text-align: center;
+  align-content: center;
+  width: 100%;
+}
