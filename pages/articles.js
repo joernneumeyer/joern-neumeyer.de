@@ -44,12 +44,12 @@
     var articleTexts = document.createElement('div');
     articleTexts.classList.add('col-sm-9');
 
-    var articleHeading = createElementWithAttributes('span', {
+    var articleHeading = createElementWithAttributes('p', {
       innerText: article.title,
       className: 'section-heading row col'
     });
 
-    var articleDescription = createElementWithAttributes('span', {
+    var articleDescription = createElementWithAttributes('p', {
       innerText: article.description,
       className: 'row col'
     });
