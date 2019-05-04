@@ -18,5 +18,5 @@
 */
 
 (function(){
-  setPageTitle('Contact - Jörn Neumeyer');
+
 })();

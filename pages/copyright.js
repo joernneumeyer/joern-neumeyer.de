@@ -18,5 +18,5 @@
 */
 
 (function(){
-  setPageTitle('Copyright - Jörn Neumeyer');
+
 })();

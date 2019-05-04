@@ -18,5 +18,5 @@
 */
 
 (function(){
-  setPageTitle('Home - Jörn Neumeyer');
+
 })();

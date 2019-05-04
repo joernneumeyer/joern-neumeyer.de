@@ -18,8 +18,6 @@
 */
 
 (function(){
-  setPageTitle('Articles - Jörn Neumeyer');
-
   var articlesList = document.getElementById('articles-list');
 
   var articles = [
