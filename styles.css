@@ -44,12 +44,14 @@ footer {
 
 .chapter-heading {
   font-size: 2em;
-  line-height: 200%;
+  padding-top: 10pt;
+  margin-bottom: 20pt;
 }
 
 .section-heading {
   font-size: 1.5em;
-  line-height: 150%;
+  padding-top: 10pt;
+  margin-bottom: 20pt;
 }
 
 @media (max-width: 1000px) {
