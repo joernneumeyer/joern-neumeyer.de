@@ -23,6 +23,7 @@
 
 main {
   text-align: justify;
+  min-height: calc(100vh - 75pt);
 }
 
 .center-text {
@@ -40,8 +41,6 @@ header {
 
 footer {
   left: 0;
-  bottom: 5pt;
-  position: fixed;
   align-content: center;
   width: 100%;
   font-size: 1.5em;
