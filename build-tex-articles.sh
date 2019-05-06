@@ -23,6 +23,13 @@ set -e
 build-article() {
   article=$1
   cd articles/${article}
+  if [[ -f ${article}.tex ]]
+  then
+    if [[ ${article}.tex -ot ${article}.pdf ]]
+    then
+      return
+    fi
+  fi
   latex ${article}.tex && dvips ${article}.dvi -Ppdf && ps2pdf ${article}.ps
   remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out texput.log")
   for item in ${remove_list}
