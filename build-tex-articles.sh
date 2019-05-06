@@ -18,6 +18,8 @@
   along with joern-neumeyer.de. If not, see <https://www.gnu.org/licenses/>.
 BLOCK_COMMENT
 
+set -e
+
 build-article() {
   article=$1
   cd articles/${article}
@@ -36,7 +38,7 @@ build-article() {
   fi
 }
 
-ARTICLES=$(ls articles)
+ARTICLES=$(ls articles | grep -E '^[^.]+$')
 
 for ARTICLE in ${ARTICLES}
 do
