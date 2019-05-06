@@ -80,9 +80,14 @@
       downloadLinks.appendChild(articleDownloadZip);
     }
 
+    var lastBuild = createElementWithAttributes('span', {
+      innerHTML: 'Last build: ' + article.buildInfo.build_time.toLocaleDateString() + ' ' + article.buildInfo.build_time.toLocaleTimeString()
+    });
+
     articleTexts.appendChild(articleHeading);
     articleTexts.appendChild(articleDescription);
     articleTexts.appendChild(downloadLinks);
+    articleTexts.appendChild(lastBuild);
 
     articleElement.appendChild(thumbnailContainer);
     articleElement.appendChild(articleTexts);
@@ -93,7 +98,24 @@
   fetch('/articles/articles.json')
     .then(function(response){
       return response.json();
-    }).then(function(articles) {
+    })
+    .then(function(articles) {
+      return Promise.all(
+        articles.map(function(article) {
+          return fetch('/articles/' + article.code + '/build-info.json')
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(buildInfo) {
+            buildInfo.build_time = new Date(buildInfo.build_time);
+            article.buildInfo = buildInfo;
+            return article;
+          });
+        }
+      ))
+    })
+    .then(function(articles) {
+      console.log(articles);
       articles.forEach(function(article, i) {
         var renderedArticle = renderArticle(article);
         articlesList.appendChild(renderedArticle);
