@@ -1,0 +1,18 @@
+[
+  {
+    "code": "home",
+    "title": "Home"
+  },
+  {
+    "code": "articles",
+    "title": "Articles"
+  },
+  {
+    "code": "contact",
+    "title": "Contact"
+  },
+  {
+    "code": "copyright",
+    "title": "Copyright"
+  }
+]
