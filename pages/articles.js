@@ -20,15 +20,6 @@
 (function(){
   var articlesList = document.getElementById('articles-list');
 
-  var articles = [
-    {
-      title: 'How to compile Objective-C code on GNU/Linux based operating systems with GNUstep',
-      code: 'objective-c-gnu-linux',
-      description: 'Did you ever want to play around with Objective-C but didn\'t how without a Mac? In this article I explain how I got Objective-C running on my machine using GNUstep.',
-      related_files: ['main.m', 'Foo.h', 'Foo.m', 'Makefile', 'build.sh']
-    }
-  ];
-
   var renderArticle = function(article) {
     var articleElement = document.createElement('div');
     articleElement.classList.add('row');
@@ -106,8 +97,13 @@
     return articleElement;
   }
 
-  articles.forEach(function(article, i) {
-    var renderedArticle = renderArticle(article);
-    articlesList.appendChild(renderedArticle);
-  });
+  fetch('/articles/articles.json')
+    .then(function(response){
+      return response.json();
+    }).then(function(articles) {
+      articles.forEach(function(article, i) {
+        var renderedArticle = renderArticle(article);
+        articlesList.appendChild(renderedArticle);
+      });
+    });
 })();
