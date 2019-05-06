@@ -4,7 +4,7 @@
 \usepackage{hyperref}
 \usepackage{color}
 \usepackage{courier}
-\usepackage[left=10px,right=10px,top=10px,bottom=10px,paperwidth=6in,paperheight=23in]{geometry}
+\usepackage[left=20px,right=20px,top=10px,bottom=10px]{geometry}
 
 \lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
 
@@ -20,7 +20,7 @@
   basicstyle=\ttfamily,
   language={[Objective]C},
   numbers=left,
-  numbersep=0pt,
+  numbersep=5pt,
   title=\lstname,
   stringstyle=\color{red},
   showspaces=false,
@@ -79,6 +79,7 @@
   For some reason gnustep-config would not produce any output when run inside a Makefile.
   Therefore, I use a bash helper to retrieve the compiler flags and pass them to my Makefile.
   So, the important line of my build helper - build.sh - looks like this:
+  \newpage
   \begin{lstlisting}[language=bash]
     make FLAGS="$(gnustep-config --objc-flags) $(gnustep-config --base-libs)"
   \end{lstlisting}
@@ -93,7 +94,7 @@
   After enabling script execution - chmod +x build.sh - we can run our build script via ./build.sh and our code compiles successfully via make.
   \section{Copyright}
   Copyright \textcopyright \enspace2019 J\"orn Neumeyer\\
-  Unless specified otherwise, the content of this article is licensed under the \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International Public License}.
+  Unless specified otherwise, the content of this article is licensed under the \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International Public License}.
   You may modify, copy, distribute, and display this material, but you must give credit to the original authors. Please see the license for details.
 
   \section{Source File Content}
