@@ -4,4 +4,6 @@
 *.pdf
 *.ps
 *.zip
+*.out
+*.synctex.gz
 build-info.json
