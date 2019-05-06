@@ -66,30 +66,23 @@
       className: 'button button--primary button--small',
     });
 
-    var otherArticleFiles = createElementWithAttributes('span', {
-      innerHTML: 'Other article files:&nbsp;',
-      className: 'row col',
-    });
+    downloadLinks.appendChild(articleDownloadPdf);
+    downloadLinks.appendChild(articleDownloadTex);
 
-    article.related_files.forEach(function(file) {
-      otherArticleFiles.appendChild(createElementWithAttributes('a', {
+    if (article.bundle_available) {
+      var articleDownloadZip = createElementWithAttributes('a', {
         target: '_blank',
         rel: 'noreferrer',
-        innerText: file,
-        href: '/articles/' + article.code + '/' + file,
+        innerText: 'Download Article ZIP bundle',
+        href: '/articles/' + article.code + '/' + article.code + '.zip',
         className: 'button button--primary button--small',
-      }));
-    });
-
-    downloadLinks.appendChild(articleDownloadTex);
-    downloadLinks.appendChild(articleDownloadPdf);
+      });
+      downloadLinks.appendChild(articleDownloadZip);
+    }
 
     articleTexts.appendChild(articleHeading);
     articleTexts.appendChild(articleDescription);
     articleTexts.appendChild(downloadLinks);
-    if (article.related_files.length) {
-      articleTexts.appendChild(otherArticleFiles);
-    }
 
     articleElement.appendChild(thumbnailContainer);
     articleElement.appendChild(articleTexts);
