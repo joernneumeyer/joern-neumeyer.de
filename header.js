@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function(){
   var mainElement = document.getElementsByTagName('main')[0];
   var initialLoad = true;
 
+  var cache = { };
+
   var clickHandlerFactory = function(page) {
     return function() {
       if (page.code === getPageFragment() && !initialLoad) return;
@@ -29,16 +31,45 @@ document.addEventListener('DOMContentLoaded', function(){
       document.getElementById('nav-link-' + page.code).classList.add('is-selected');
       setPageFragment(page.code);
       setPageTitle(this.innerText + ' - J&ouml;rn Neumeyer');
-      fetch('pages/' + page.code + '.html').then(function(response) {
+      var pageUrl = 'pages/' + page.code + '.html';
+      (
+        cache.hasOwnProperty(pageUrl)
+        ? Promise.resolve(cache[pageUrl])
+        : fetch(pageUrl)
+      ).then(function(response) {
+        if (typeof response === 'string') {
+          console.log('cache');
+          return response;
+        }
         return response.text();
       }).then(function(html) {
+        if (!cache.hasOwnProperty(pageUrl)) {
+          cache[pageUrl] = html;
+        }
+
         mainElement.innerHTML = html;
-        fetch('pages/' + page.code + '.js').then(function(response) {
+        var scriptUrl = 'pages/' + page.code + '.js';
+        (
+          cache.hasOwnProperty(scriptUrl)
+          ? Promise.resolve(cache[scriptUrl])
+          : fetch(scriptUrl)
+        )
+        .then(function(response) {
+          if (typeof response === 'string') {
+            return response;
+          }
           if (response.status === 404) {
             throw undefined;
           }
           return response.text();
-        }).then(eval).catch(function(error){
+        })
+        .then(function(script) {
+          eval(script);
+          if (!cache.hasOwnProperty(scriptUrl)) {
+            cache[scriptUrl] = script;
+          }
+        })
+        .catch(function(error){
           if (error === undefined) {
             console.info('did not find a script for page ' + page.code);
           } else {
