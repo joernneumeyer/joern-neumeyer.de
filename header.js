@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function(){
     anchor.innerText = pageParts.map(upperCaseFirst).join('');
     anchor.classList.add('tabs-item');
     anchor.classList.add('clickable');
-    anchor.classList.add('col');
+    anchor.classList.add('col-sm-12');
     anchor.id = 'nav-link-' + page;
     anchor.addEventListener('click', clickHandlerFactory(page));
     return anchor;
@@ -72,10 +72,11 @@ document.addEventListener('DOMContentLoaded', function(){
   pages
     .map(mapPageTitleToLink)
     .forEach(function(link, i) {
-      headerList.appendChild(link);
-      if (i < pages.length - 1) {
-        headerList.appendChild(makeSpacingSpan());
-      }
+      var linkWrapper = createElementWithAttributes('div', {
+        className: 'col-sm-3'
+      });
+      linkWrapper.appendChild(link);
+      headerList.appendChild(linkWrapper);
     });
 
   setPageFragment(getPageFragment() || 'home');
