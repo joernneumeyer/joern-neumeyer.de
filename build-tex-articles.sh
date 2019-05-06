@@ -43,6 +43,7 @@ build-article() {
   then
     ./bundle-article.sh
   fi
+  echo "{\"build_time\":\"$(date --iso-8601=seconds)\"}" > build-info.json
 }
 
 ARTICLES=$(ls articles | grep -E '^[^.]+$')
