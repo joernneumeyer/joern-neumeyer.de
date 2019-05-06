@@ -30,8 +30,8 @@ build-article() {
       return
     fi
   fi
-  latex ${article}.tex && dvips ${article}.dvi -Ppdf && ps2pdf ${article}.ps
-  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz texput.log")
+  pdflatex ${article}.tex
+  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz ${article}.aux ${article}.log texput.log")
   for item in ${remove_list}
   do
     if [[ -f ${item} ]]
