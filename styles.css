@@ -58,6 +58,10 @@ footer {
   margin-bottom: 20pt;
 }
 
+.valign-middle {
+  vertical-align: middle;
+}
+
 @media (max-width: 1000px) {
   body {
     font-size: 20pt;
