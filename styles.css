@@ -83,3 +83,12 @@ footer {
 .justify-text {
   text-align: justify;
 }
+
+#contact-list {
+  padding-left: 15pt;
+  list-style-type: upper-alpha;
+}
+
+#contact-list > li {
+  list-style: inherit;
+}
