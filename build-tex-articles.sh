@@ -27,6 +27,7 @@ build-article() {
   then
     if [[ ${article}.tex -ot ${article}.pdf ]]
     then
+      cd ../..
       return
     fi
   fi
@@ -44,6 +45,7 @@ build-article() {
     ./bundle-article.sh
   fi
   echo "{\"build_time\":\"$(date --iso-8601=seconds)\"}" > build-info.json
+  cd ../..
 }
 
 ARTICLES=$(ls articles | grep -E '^[^.]+$')
