@@ -29,7 +29,7 @@ build-article() {
       return
     fi
   fi
-  pdflatex ${article}.tex
+  pdflatex ${article}.tex --shell-escape
   remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz ${article}.aux ${article}.log ${article}.snm ${article}.nav texput.log")
   for item in ${remove_list}
   do
