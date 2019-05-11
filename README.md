@@ -2,6 +2,11 @@
 This is just my personal homepage.
 In case you want to check out some of my articles or get in touch you can just check it out at [joern-neumeyer.de](https://joern-neumeyer.de).
 
+## Building articles and slides
+To easily build all articles and slides just run the script `build-tex.sh`.
+That way all LaTeX articles and slides will be built for you.
+The script will only build the articles/slides with a `.tex` file newer than its corresponding `.pdf` file.
+
 ## Licensing
 All articles of my website are published under the [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
 All the code in this repository is licensed under [version 3 of the GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.html) (license code GPL-3.0-or-later).
