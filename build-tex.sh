@@ -22,17 +22,15 @@ set -e
 
 build-article() {
   article=$1
-  cd articles/${article}
   if [[ -f ${article}.tex ]]
   then
     if [[ ${article}.tex -ot ${article}.pdf ]]
     then
-      cd ../..
       return
     fi
   fi
   pdflatex ${article}.tex
-  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz ${article}.aux ${article}.log texput.log")
+  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz ${article}.aux ${article}.log ${article}.snm ${article}.nav texput.log")
   for item in ${remove_list}
   do
     if [[ -f ${item} ]]
@@ -45,12 +43,23 @@ build-article() {
     ./bundle-article.sh
   fi
   echo "{\"build_time\":\"$(date --iso-8601=seconds)\"}" > build-info.json
-  cd ../..
 }
 
 ARTICLES=$(ls articles | grep -E '^[^.]+$')
+SLIDES=$(ls slides | grep -E '^[^.]+$')
 
+cd articles
 for ARTICLE in ${ARTICLES}
 do
+  cd ${ARTICLE}
   build-article ${ARTICLE}
+  cd ..
+done
+
+cd ../slides
+for SLIDE in ${SLIDES}
+do
+  cd ${SLIDE}
+  build-article ${SLIDE}
+  cd ..
 done
