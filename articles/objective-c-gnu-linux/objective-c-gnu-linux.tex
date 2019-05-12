@@ -45,14 +45,28 @@
 \begin{document}
   \maketitle
   \section{Required Packages}
+  In order to compile Objective-C on GNU/Linux, we need a couple of packages:
   \begin{itemize}
     \item clang
     \item gnustep-make
     \item gnustep-devel
     \item libobjc2 (from \url{https://github.com/gnustep/libobjc2})
   \end{itemize}
+  \section{Installation}
+  Installation is pretty straight forward.
+  First, install clang and the GNUstep packages via your package manager of choice. In my case it's apt.
+  \begin{center}
+    sudo apt install clang gnustep-make gnustep-devel
+  \end{center}
+  The installation of \textbf{libobjc2} is also easy.
+  Just download the zipped source code of the latest release and extract it.
+  After that, we just have to link \textbf{libobjc2} properly, so it can be used.
+  In this example, the ZIP has been extracted to the folder \textbf{libobjc2} in my personal Downloads.
+  \begin{center}
+    sudo ln -s /home/foo/Downloads/libobjc2/objc /usr/include/objc
+  \end{center}
   \section{Sample Code}
-  The rest of the article will be based on the following source code files:
+  The rest of this article will be based on the following source code files:
   \begin{itemize}
     \item main.m - The main file of the executable
     \item Foo.h - The header of the Foo library we build
@@ -67,11 +81,12 @@
     [pool drain]; // line 11
   \end{lstlisting}
   These lines can also be omitted, but that will lead to a large number of logging in your console as you run your code.
+  \newpage
   \section{Building}
   It does not take much to compile an Objective-C file.
   Using clang, the command looks like the following:
   \begin{lstlisting}[language=bash]
-    clang $(gnustep-config --objc-flags) $(gnustep-config --base-libs) main.m
+    clang $(gnustep-config --objc-flags) $(gnustep-config --base-libs) main.m Foo.m
   \end{lstlisting}
   \subsection{Building with make}
   In my experience building with make does not work - sort of.
@@ -79,7 +94,6 @@
   For some reason gnustep-config would not produce any output when run inside a Makefile.
   Therefore, I use a bash helper to retrieve the compiler flags and pass them to my Makefile.
   So, the important line of my build helper - build.sh - looks like this:
-  \newpage
   \begin{lstlisting}[language=bash]
     make FLAGS="$(gnustep-config --objc-flags) $(gnustep-config --base-libs)"
   \end{lstlisting}
@@ -96,9 +110,12 @@
   Copyright \textcopyright \enspace2019 J\"orn Neumeyer\\
   Unless specified otherwise, the content of this article is licensed under the \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International Public License}.
   You may modify, copy, distribute, and display this material, but you must give credit to the original authors. Please see the license for details.
-
+  \newpage
   \section{Source File Content}
-  \lstinputlisting[frame=single]{Foo.h}
-  \lstinputlisting[frame=single]{Foo.m}
+  \lstinputlisting[frame=single,language=make]{Makefile}
+  \lstinputlisting[frame=single,language=bash]{build.sh}
   \lstinputlisting[frame=single]{main.m}
+  \lstinputlisting[frame=single]{Foo.h}
+  \newpage
+  \lstinputlisting[frame=single]{Foo.m}
 \end{document}
