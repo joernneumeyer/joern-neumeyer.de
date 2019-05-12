@@ -3,7 +3,6 @@
     "title": "How to compile Objective-C code on GNU/Linux based operating systems with GNUstep",
     "code": "objective-c-gnu-linux",
     "description": "Did you ever want to play around with Objective-C but didn't how without a Mac? In this article I explain how I got Objective-C running on my machine using GNUstep.",
-    "related_files": ["main.m", "Foo.h", "Foo.m", "Makefile", "build.sh"],
     "bundle_available": true
   }
 ]
