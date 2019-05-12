@@ -51,6 +51,7 @@
     \item gnustep-make
     \item gnustep-devel
     \item libobjc2 (from \url{https://github.com/gnustep/libobjc2})
+    \item optionally: libobjc-8-dev (see building section)
   \end{itemize}
   \section{Installation}
   Installation is pretty straight forward.
@@ -88,6 +89,8 @@
   \begin{lstlisting}[language=bash]
     clang $(gnustep-config --objc-flags) $(gnustep-config --base-libs) main.m Foo.m
   \end{lstlisting}
+  In case the build process fails because the compiler could not find \textbf{-lobjc}, try installing \textbf{libobjc-8-dev}.
+  That should fix the missing library error.
   \subsection{Building with make}
   In my experience building with make does not work - sort of.
   As seen in the above section, we retrieve a bunch of compiler flags through gnustep-config.
