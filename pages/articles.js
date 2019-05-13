@@ -120,5 +120,12 @@
         var renderedArticle = renderArticle(article);
         articlesList.appendChild(renderedArticle);
       });
+    })
+    .catch(function() {
+      var errorElemenr = createElementWithAttributes('p', {
+        innerHTML: 'Could not load any articles. Perhaps the server wen down?'
+      });
+
+      articlesList.appendChild(errorElemenr);
     });
 })();
