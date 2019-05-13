@@ -71,6 +71,9 @@ document.addEventListener('DOMContentLoaded', function(){
         })
         .catch(function(error){
           if (error === undefined) {
+            if (!cache.hasOwnProperty(scriptUrl)) {
+              cache[scriptUrl] = '';
+            }
             console.info('did not find a script for page ' + page.code);
           } else {
             console.error('Error while loading script for "' + page.code + '"');
