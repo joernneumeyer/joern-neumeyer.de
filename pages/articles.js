@@ -115,7 +115,6 @@
       ))
     })
     .then(function(articles) {
-      console.log(articles);
       articles.forEach(function(article, i) {
         var renderedArticle = renderArticle(article);
         articlesList.appendChild(renderedArticle);
