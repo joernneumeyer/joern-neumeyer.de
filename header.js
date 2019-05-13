@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function(){
     anchor.innerText = page.title;
     anchor.classList.add('tabs-item');
     anchor.classList.add('clickable');
-    anchor.classList.add('col-sm-12');
+    anchor.classList.add('col');
     anchor.id = 'nav-link-' + page.code;
     anchor.addEventListener('click', clickHandlerFactory(page));
     return anchor;
@@ -106,11 +106,11 @@ document.addEventListener('DOMContentLoaded', function(){
       pages
         .map(mapPageInfoToLink)
         .forEach(function(link, i) {
-          var linkWrapper = createElementWithAttributes('div', {
-            className: 'col-sm-3'
+          /* var linkWrapper = createElementWithAttributes('div', {
+            className: 'col'
           });
-          linkWrapper.appendChild(link);
-          headerList.appendChild(linkWrapper);
+          linkWrapper.appendChild(link); */
+          headerList.appendChild(link);
         });
 
       setPageFragment(getPageFragment() || 'home');
