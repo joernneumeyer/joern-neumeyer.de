@@ -4,6 +4,10 @@
     "title": "Home"
   },
   {
+    "code": "about",
+    "title": "About"
+  },
+  {
     "code": "articles",
     "title": "Articles"
   },
