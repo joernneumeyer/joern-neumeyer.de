@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function(){
         : fetch(pageUrl)
       ).then(function(response) {
         if (typeof response === 'string') {
-          console.log('cache');
           return response;
         }
         return response.text();
@@ -74,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function(){
             if (!cache.hasOwnProperty(scriptUrl)) {
               cache[scriptUrl] = '';
             }
-            console.info('did not find a script for page ' + page.code);
+            // console.info('did not find a script for page ' + page.code);
           } else {
             console.error('Error while loading script for "' + page.code + '"');
             throw error;
