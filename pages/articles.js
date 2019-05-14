@@ -24,16 +24,17 @@
     var articleElement = document.createElement('div');
     articleElement.classList.add('row');
 
-    var thumbnail = document.createElement('img');
+    /* var thumbnail = document.createElement('img');
     thumbnail.alt = article.code;
     thumbnail.src = 'articles/' + article.code + '/thumb.svg';
 
     var thumbnailContainer = document.createElement('div');
     thumbnailContainer.classList.add('col-sm-3');
-    thumbnailContainer.appendChild(thumbnail);
+    thumbnailContainer.appendChild(thumbnail); */
 
     var articleTexts = document.createElement('div');
-    articleTexts.classList.add('col-sm-9');
+    articleTexts.classList.add('col-sm-12');
+    // articleTexts.classList.add('col-sm-9');
 
     var articleHeading = createElementWithAttributes('p', {
       innerText: article.title,
@@ -89,7 +90,7 @@
     articleTexts.appendChild(downloadLinks);
     articleTexts.appendChild(lastBuild);
 
-    articleElement.appendChild(thumbnailContainer);
+    // articleElement.appendChild(thumbnailContainer);
     articleElement.appendChild(articleTexts);
 
     return articleElement;
@@ -118,9 +119,14 @@
       articles.forEach(function(article, i) {
         var renderedArticle = renderArticle(article);
         articlesList.appendChild(renderedArticle);
+        if (i < articles.length - 1) {
+          var hr = document.createElement('hr');
+          articlesList.appendChild(hr);
+        }
       });
     })
-    .catch(function() {
+    .catch(function(e) {
+      console.error(e);
       var errorElemenr = createElementWithAttributes('p', {
         innerHTML: 'Could not load any articles. Perhaps the server wen down?'
       });
