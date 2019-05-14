@@ -8,7 +8,7 @@ int main() {
   if (age > 17) {
     printf("You're old enough.\r\n");
   } else {
-    printf("Please come back in %d years and try again.\r\n", age);
+    printf("Please come back in %d years and try again.\r\n", 18 - age);
   }
 
   return 0;
