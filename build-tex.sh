@@ -20,17 +20,26 @@ BLOCK_COMMENT
 
 set -e
 
+FORCE_BUILD=0
+if [[ $1 ]]
+then
+  FORCE_BUILD=1
+fi
+
 build-article() {
   article=$1
-  if [[ -f ${article}.tex ]]
+  if [[ ${FORCE_BUILD} == 0 ]]
   then
-    if [[ ${article}.tex -ot ${article}.pdf ]]
+    if [[ -f ${article}.tex ]]
     then
-      return
+      if [[ ${article}.tex -ot ${article}.pdf ]]
+      then
+        return
+      fi
     fi
   fi
   pdflatex ${article}.tex
-  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz ${article}.aux ${article}.log ${article}.snm ${article}.nav texput.log")
+  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz ${article}.aux ${article}.log ${article}.snm ${article}.nav ${article}.pdf texput.log")
   for item in ${remove_list}
   do
     if [[ -f ${item} ]]
