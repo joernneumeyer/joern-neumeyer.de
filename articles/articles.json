@@ -1,14 +1,14 @@
 [
   {
-    "title": "How to compile Objective-C code on GNU/Linux based operating systems with GNUstep",
-    "code": "objective-c-gnu-linux",
-    "description": "Did you ever want to play around with Objective-C but didn't how without a Mac? In this article I explain how I got Objective-C running on my machine using GNUstep.",
-    "bundle_available": true
-  },
-  {
     "title": "Understanding C pointer arithmetic",
     "code": "c-pointer-arithmetic",
     "description": "Do you have trouble understanding pointers in C? In this article I try to explain pointer arithmetic in C with some background information.",
+    "bundle_available": true
+  },
+  {
+    "title": "How to compile Objective-C code on GNU/Linux based operating systems with GNUstep",
+    "code": "objective-c-gnu-linux",
+    "description": "Did you ever want to play around with Objective-C but didn't how without a Mac? In this article I explain how I got Objective-C running on my machine using GNUstep.",
     "bundle_available": true
   }
 ]
