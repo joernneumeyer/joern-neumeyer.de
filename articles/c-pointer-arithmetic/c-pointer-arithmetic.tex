@@ -5,12 +5,13 @@
 \usepackage{color}
 \usepackage{courier}
 \usepackage[left=20px,right=20px,top=10px,bottom=10px]{geometry}
+\usepackage[T1]{fontenc}
 
 \lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
 
 \author{J\"orn Neumeyer}
 
-\title{Understanding C/C++ pointer arithmetic and memory allocation}
+\title{Understanding C pointer arithmetic}
 
 \definecolor{darkturquoise}{rgb}{0.0, 0.81, 0.82}
 \definecolor{gray}{rgb}{0.5, 0.5, 0.5}
@@ -29,12 +30,12 @@
   morecomment=[l][\color{magenta}]{\#},
   directivestyle=\color{green},
   commentstyle=\color{gray},
+  keywordstyle=\color{blue},
   classoffset=0,
   % morekeywords={@property,@synthesize,super},
-  keywordstyle=\color{blue},
   classoffset=1,
-  morekeywords={NSString,Foo,NSAutoreleasePool,NSObject},
-  keywordstyle=\color{orangepeel},
+  morekeywords={function\_t,point\_t,vector3\_t},
+  keywordstyle=\color{darkturquoise},
 }
 
 \begin{document}
@@ -64,8 +65,8 @@
   Now, that memory block is not already allocated for us like the stack, but it is more or less the amount of memory we can allocate on the heap.
   Allocation also works different from its stack variant.
   Later on we'll be using the specific C/C++ functionality to actually allocate the memory.
-  But the way it works in general will stay the same: as soon as you request a set amount of memory inside your program, the operating system is going to allocate that amount of memory on the heap and return a pointer to the beginning of the freshly allocated memory.
-  There is a little more going on in the background, but we'll skip that for simplicity.
+  But the way it works in general will stay the same: as soon as you request a set amount of memory inside your program, the operating system is going to allocate a chunk of memory on the heap, with at least the specified amount of bytes and return a pointer to the beginning of the freshly allocated memory.
+  \\There is a little more going on in the background, but we'll skip that for simplicity.
   Since the memory has been allocated outside the stack, it will stay there until it is freed explicitly.
   Therefore, that memory will stay valid even after leaving the scope in which it has been allocated.
   \\So, the advantage of heap allocated memory over the stack one is the amount of memory we are able to allocate and the fact that this memory lives outside the scope of its creation.
@@ -83,12 +84,82 @@
   \lstinputlisting{example-stdin.c}
   The function \textbf{scanf} can read a value from \textbf{stdin} for us.
   Since it is common for functions in C to return a success code, they typically write their result to so called \underline{output parameters}.
+  This technique is also sometimes used to return multiple values at once.
   But functions like \textbf{scanf} do not have a clue to what location they should write their result.
   So, we have to tell the function to what location it should write the data with a pointer.
   That's basically all a pointer is: some location in memory.
   As shown in line \textbf{line 7}, we can a pointer to a variable (its memory address) by using the ampersand (\&) operator.
+  \subsection{What About Arrays?}
+  To put it simple: an array is basically the same as a pointer.
+  Regardless of the way you allocate them, arrays are always one consecutive block of memory.
+  Therefore, you can just apply pointer arithmetic to them.
+  As the example below will show, local arrays as well as heap allocated arrays are seen as pointers by the compiler, as the code compiles without any errors.
+  There is also not much to the bracket operator ([]), as it just moves the pointer by the specified amount of entries and and gives access (read/write) to the value at that position.
+  \\\\Simple example:
+  \begin{lstlisting}
+int main() {
+  int a[] = { 1, 2, 3 }; // a=0x800
+  int b* = &a[1];        // b=0x804
+  int c = b[-1];         // c=1
+}
+  \end{lstlisting}
+  \newpage
+  \lstinputlisting{example-array.c}
   \subsection{Using Referenced Memory}
-  Let's say we want to write something simple which could go wrong.
+  Let's implement a function to subtract one mathematical function (a function in form: $a2 * x^2 + a1 * x + a0$) from another one.
+  \lstinputlisting{example-output-parameter.c}
+  In the example, all parameters of the function \textbf{subtract\_functions} are pointers to instances of the \textbf{function\_t} struct.
+  \begin{center}
+    But not all parameters are pointers for the same reason!
+    \\The reason for that follows in the next section.
+    \\Right now I want to focus on the usage of the data.
+  \end{center}
+  The example already showcases the difference in usage, regarding value types and reference types.
+  Line 18 shows how values inside a struct are accessed, if it is present as a value.
+  You just use the name of the struct instance and append it with a dot as well the name of the value you want to access.
+  \\However, that does not work with a pointer.
+  Since it is only a reference to a memory address, we have to de-reference it.
+  The corresponding operator is the asterisk (*).
+  As seen in line 10, after de-referencing the result pointer, we can access its values as usual.
+  But the way we access the members is not that nice.
+  That is the reason why you normally use the arrow operator (->) instead.
+  It de-references the struct instance and allows you to access its members as shown in line 8 and 9.
+  \subsection{Why Pointers As Parameters?}
+  As seen in the code example, \textbf{function\_t} is a complex type consisting of three \textbf{double} values.
+  Therefore, the size of an instance of that struct is 24bytes.
+  While that doesn't sound like a lot in today's computing, it is a big deal for something like embedded devices which probably only feature a few kilo bytes of memory.
+  This brings me directly to the reason why the first two parameters are pointers: to avoid copying!
+  \\Copying the struct instance has the benefit that the function cannot change any value inside the original.
+  But the main downside is the fact that we have to copy a complex type which uses quite some memory.
+  A pointer to a struct still uses some memory, but it is way less than a copy would use.
+  Since a pointer simply represents a 32bit memory address, its size is (obviously) only 4 bytes.
+  \\The last parameter - \textbf{func\_result} - is an output parameter.
+  Thanks to that pointer, the function itself does not have to worry about the allocation of the memory for the result.
+  But it also has an important benefit in regard to speed and memory management.
+  It allows you to use the memory you allocated on the stack.
+  This results not just in a faster memory allocation, but you also don't have to worry about the freeing of the allocated memory!
+  \section{Some Edge Use Cases Of Pointers}
+  Let me just throw a piece of code at you:
+  \lstinputlisting{example-punning.c}
+  It may look complicated, but you just have to remember one thing: a pointer is a memory address.
+  And memory addresses do NOT have TYPES.
+  A data type gives meaning to bytes, so the compiler/program knows how certain bytes should be interpreted.
+  And that is the point: you never actually use a \textbf{function\_t} or a \textbf{vector3\_t} instance, but just a bunch of bytes which are interpreted in a (hopefully) useful manner.
+  \subsection{An Explanation Of Type Punning}
+  Type punning is a way of cleverly faking data types.
+  A realistic example for that use case is line 12 in the previous code.
+  When dealing with anything in 3D-space (e.g. in a video game) you are working a lot with 3D-points.
+  Let's say we would like to create a generic way of doubling the length of vectors in the $n^t$$^h$ dimension.
+  So our function would probably take an \textbf{int*} for the points and an \textbf{int} for the count of points as its parameters.
+  Since we now know how to transform a struct (only consisting of members of the same type) into a pointer, we can just pass the faked pointer of our vector along with the number of points into the function and it will apply the doubling operation on all values of the point.
+  \section{Conclusion}
+  So, what actually is a pointer now?
+  A pointer is nothing more than a memory address.
+  That's it.
+  \\For what are they used?
+  To reference a certain location in memory.
+  \\What does that mean?
+  Well, that depends entirely on what you want to do.
   
   \section{Copyright}
   Copyright \textcopyright \enspace2019 J\"orn Neumeyer\\
