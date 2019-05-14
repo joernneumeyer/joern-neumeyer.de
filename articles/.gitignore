@@ -6,6 +6,7 @@
 *.zip
 *.out
 *.synctex.gz
+*.toc
 build-info.json
 *.o
 *.d
