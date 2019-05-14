@@ -35,25 +35,25 @@ build-article() {
       return
     fi
   fi
-  if [[ -f ${article}.pdf ]]
-  then
-    rm ${article}.pdf
-  fi
   pdflatex ${article}.tex
-  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz ${article}.aux ${article}.log ${article}.snm ${article}.nav texput.log")
-  for item in ${remove_list}
-  do
-    if [[ -f ${item} ]]
-    then
-      rm ${item}
-    fi
-  done
   if [[ -f bundle-article.sh ]]
   then
     ./bundle-article.sh
   fi
   echo "{\"build_time\":\"$(date --iso-8601=seconds)\"}" > build-info.json
 }
+
+# clean-article() {
+#   article=$1
+#   remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz ${article}.aux ${article}.log ${article}.snm ${article}.nav texput.log")
+#   for item in ${remove_list}
+#   do
+#     if [[ -f ${item} ]]
+#     then
+#       rm ${item}
+#     fi
+#   done
+# }
 
 ARTICLES=$(ls articles | grep -E '^[^.]+$')
 SLIDES=$(ls slides | grep -E '^[^.]+$')
