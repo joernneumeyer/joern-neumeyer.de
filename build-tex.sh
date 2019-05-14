@@ -30,16 +30,17 @@ build-article() {
   article=$1
   if [[ ${FORCE_BUILD} == 0 ]]
   then
-    if [[ -f ${article}.tex ]]
+    if [[ ${article}.tex -ot ${article}.pdf ]]
     then
-      if [[ ${article}.tex -ot ${article}.pdf ]]
-      then
-        return
-      fi
+      return
     fi
   fi
+  if [[ -f ${article}.pdf ]]
+  then
+    rm ${article}.pdf
+  fi
   pdflatex ${article}.tex
-  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz ${article}.aux ${article}.log ${article}.snm ${article}.nav ${article}.pdf texput.log")
+  remove_list=$(echo "${article}.aux ${article}.dvi ${article}.log ${article}.ps ${article}.toc ${article}.out ${article}.out ${article}.synctex.gz ${article}.aux ${article}.log ${article}.snm ${article}.nav texput.log")
   for item in ${remove_list}
   do
     if [[ -f ${item} ]]
