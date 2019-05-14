@@ -1,4 +1,4 @@
-all: stack stdin out-parameter
+all: stack stdin out-parameter punning
 
 stack: example-stack.c
 	gcc example-stack.c -o example-stack.bin
@@ -8,3 +8,6 @@ stdin: example-stdin.c
 
 out-parameter: example-output-parameter.c
 	gcc example-output-parameter.c -o example-output-parameter.bin
+
+punning: example-punning.c
+	gcc example-punning.c -o example-punning.bin
