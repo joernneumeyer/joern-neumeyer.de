@@ -4,5 +4,11 @@
     "code": "objective-c-gnu-linux",
     "description": "Did you ever want to play around with Objective-C but didn't how without a Mac? In this article I explain how I got Objective-C running on my machine using GNUstep.",
     "bundle_available": true
+  },
+  {
+    "title": "Understanding C/C++ pointer arithmetic and memory allocation",
+    "code": "c-pointer-arithmetic",
+    "description": "Do you have trouble understanding pointers and memory allocation in C/C++? In this article I try to explain pointer arithmetic and memory allocation in C/C++ with some background information.",
+    "bundle_available": true
   }
 ]
