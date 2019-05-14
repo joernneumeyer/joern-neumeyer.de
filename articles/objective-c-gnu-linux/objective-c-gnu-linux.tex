@@ -44,6 +44,7 @@
 
 \begin{document}
   \maketitle
+  \tableofcontents
   \section{Required Packages}
   In order to compile Objective-C on GNU/Linux, we need a couple of packages:
   \begin{itemize}
@@ -74,6 +75,7 @@
     \item Foo.m - The implementation of the Foo library
   \end{itemize}
   The actual source code is appended at the end of this article.
+  \newpage
   \subsection{Boilerplate Code}
   There is a little bit of boilerplate code in the main function.
   Namely the creation of an \textbf{NSAutoreleasePool} instance and the call of its \textbf{drain} method.
@@ -82,7 +84,6 @@
     [pool drain]; // line 11
   \end{lstlisting}
   These lines can also be omitted, but that will lead to a large number of logging in your console as you run your code.
-  \newpage
   \section{Building}
   It does not take much to compile an Objective-C file.
   Using clang, the command looks like the following:
