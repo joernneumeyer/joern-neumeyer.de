@@ -36,6 +36,7 @@ build-article() {
     fi
   fi
   pdflatex ${article}.tex
+  pdflatex ${article}.tex
   if [[ -f bundle-article.sh ]]
   then
     ./bundle-article.sh
