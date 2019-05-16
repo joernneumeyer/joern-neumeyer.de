@@ -1,6 +1,6 @@
 [
   {
-    "title": "Understanding C pointer arithmetic",
+    "title": "Understanding C Pointer Arithmetic",
     "code": "c-pointer-arithmetic",
     "description": "Do you have trouble understanding pointers in C? In this article I try to explain pointer arithmetic in C with some background information.",
     "bundle_available": true
