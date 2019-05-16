@@ -1,4 +1,4 @@
-all: stack stdin out-parameter punning array
+all: stack stdin out-parameter punning array referencing-stack
 
 stack: example-stack.c
 	gcc example-stack.c -o example-stack.bin
@@ -14,3 +14,6 @@ punning: example-punning.c
 
 array: example-array.c
 	gcc example-array.c -o example-array.bin
+
+referencing-stack: example-referencing-stack.c
+	gcc example-referencing-stack.c -o example-referencing-stack.bin
