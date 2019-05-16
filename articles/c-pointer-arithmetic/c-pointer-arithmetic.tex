@@ -11,7 +11,7 @@
 
 \author{J\"orn Neumeyer}
 
-\title{Understanding C pointer arithmetic}
+\title{Understanding C Pointer Arithmetic}
 
 \definecolor{darkturquoise}{rgb}{0.0, 0.81, 0.82}
 \definecolor{gray}{rgb}{0.5, 0.5, 0.5}
@@ -20,7 +20,7 @@
 
 \lstset{
   basicstyle=\ttfamily,
-  language={C++},
+  language={C},
   numbers=left,
   numbersep=5pt,
   title=\lstname,
@@ -40,23 +40,33 @@
 
 \begin{document}
   \maketitle
+  Copyright \textcopyright \enspace2019 J\"orn Neumeyer\\
+  Unless specified otherwise, the content of this article is licensed under the \href{https://creativecommons.org/licenses/by-sa/4.0/legalcode}{Creative Commons Attribution-ShareAlike 4.0 International Public License}.
+  You may modify, copy, distribute, and display this material, but you must give credit to the original authors. Please see the license for details.
   \tableofcontents
   \section{Introduction}
-  In this article I want to explain pointer arithmetic and memory allocation in C/C++.
-  Sine this will not be a tutorial on C/C++ in general, but only on the mentioned sub-topics, you should have some knowledge in C/C++ or similar object-oriented languages.
+  In this article, I want to explain pointer arithmetic in C.
+  Since this will not be a tutorial on C in general, but only on the mentioned sub-topic, you should have some knowledge in C or a similar low level language.
   \section{A Simplified Recap On Memory Areas}
+  \label{chap:memory-areas}
   In order to understand pointer arithmetic we should first have a look on the different memory areas in our program.
+  In case you are already familiar with those and their benefits and downsides, feel free to skip this chapter.\\
   Every program has dedicated virtual memory in the RAM which is (basically) divided into three parts: program, heap, and stack.
   The program memory simply holds binary instructions, so it is not interesting for us at the moment.
   \subsection{The Stack}
+  \label{chap:stack}
   The stack memory functions just like a standard stack collection: items are pushed to and popped from its top as needed.
-  In the case of C, local variables are pushed to the stack as soon as they are initialized and popped after their scope has been left.
+  Local variables are pushed to the stack as soon as they are initialized and popped after their scope has been left.
+  A scope is basically everything between two curly braces (\{\}).
   To showcase this mechanism of pushing, I added an example in \textbf{example-stack.c}.
   The stack also has a limited size.
   These sizes can be found in a document of the Computer Science Department at New York University regarding \href{https://cs.nyu.edu/exact/core/doc/stackOverflow.txt}{Stack Overflow Problems}, in case you would like to know the exact numbers.
   Since the stack memory is chunk of memory already allocated for us, it is pretty fast to place variables in it.
   \\So, the main takeaway is that memory we allocated on the stack is automatically freed for us and pretty fast to allocate.
+  Sadly, this nice feature also often leads to bugs.
+  For examples, go to \autoref{chap:referencing-stack-memory}.
   \subsection{The Heap}
+  \label{chap:heap}
   On the other side we have the heap memory.
   In this area things aren't quite as ordered and automated as they are on the stack.
   The main differences lies in the way of allocation and lifetime of heap memory.
@@ -64,48 +74,49 @@
   An application's virtual memory size something like 2-3GB.
   Now, that memory block is not already allocated for us like the stack, but it is more or less the amount of memory we can allocate on the heap.
   Allocation also works different from its stack variant.
-  Later on we'll be using the specific C/C++ functionality to actually allocate the memory.
+  Later on we'll be using the specific C functionality to actually allocate the memory.
   But the way it works in general will stay the same: as soon as you request a set amount of memory inside your program, the operating system is going to allocate a chunk of memory on the heap, with at least the specified amount of bytes and return a pointer to the beginning of the freshly allocated memory.
   \\There is a little more going on in the background, but we'll skip that for simplicity.
   Since the memory has been allocated outside the stack, it will stay there until it is freed explicitly.
   Therefore, that memory will stay valid even after leaving the scope in which it has been allocated.
   \\So, the advantage of heap allocated memory over the stack one is the amount of memory we are able to allocate and the fact that this memory lives outside the scope of its creation.
   However, the main disadvantage is the long time it takes for the operating system to allocate the memory, requested by your program.
+  This speed disadvantage gets really noticeable if you perform a lot of small heap memory allocations.
   \section{Working With Pointers}
-  In the previous heap section I already mentioned that the operating system will return a pointer to the beginning of heap allocated memory.
+  In \autoref{chap:heap}, I already mentioned that the operating system will return a pointer to the beginning of a block of heap allocated memory.
   So, it seems that pointers play a pretty big role when it comes down to handling any sort of memory.
   But why do we even have pointers and what are they used for?
   \subsection{Referencing Memory}
-  In C/C++ you often used reference variables instead of directly using their values.
+  In C you often use references to variables instead of their values.
   To simplify, references are used whenever you want to operate on memory (e.g. a variable) with an unknown address.
   Although unknown seems a little strange, it is the best word to describe how it actually is.
   Let me give you an example.
   Let's assume we want to read a number from \textbf{stdin} (the console) into a variable as shown in the code below.
   \lstinputlisting{example-stdin.c}
   The function \textbf{scanf} can read a value from \textbf{stdin} for us.
-  Since it is common for functions in C to return a success code, they typically write their result to so called \underline{output parameters}.
-  This technique is also sometimes used to return multiple values at once.
-  But functions like \textbf{scanf} do not have a clue to what location they should write their result.
-  So, we have to tell the function to what location it should write the data with a pointer.
-  That's basically all a pointer is: some location in memory.
-  As shown in line \textbf{line 7}, we can a pointer to a variable (its memory address) by using the ampersand (\&) operator.
-  \subsection{What About Arrays?}
-  To put it simple: an array is basically the same as a pointer.
-  Regardless of the way you allocate them, arrays are always one consecutive block of memory.
-  Therefore, you can just apply pointer arithmetic to them.
-  As the example below will show, local arrays as well as heap allocated arrays are seen as pointers by the compiler, as the code compiles without any errors.
-  There is also not much to the bracket operator ([]), as it just moves the pointer by the specified amount of entries and and gives access (read/write) to the value at that position.
-  \\\\Simple example:
-  \begin{lstlisting}
-int main() {
-  int a[] = { 1, 2, 3 }; // a=0x800
-  int b* = &a[1];        // b=0x804
-  int c = b[-1];         // c=1
-}
-  \end{lstlisting}
+  Due to historical reasons, such I/O functions do not return their result but write it to a specified location in memory.
+  As shown in \textbf{line 7}, we can use the ampersand (\&) operator to retrieve the location of a variable in memory.
+  There we have it, our first pointer!
+  This example already answers the question what a pointer technically is: an address in memory.
+  That way \textbf{scanf} knows the position in memory where we would like to store its result.
+  However, to get an idea how that pointer is used and why it is used, we'll have a look into the next section.
   \newpage
-  \lstinputlisting{example-array.c}
+  \subsection{Why Pointers As Parameters?}
+  As seen in the code example in \autoref{chap:using-referenced-memory}, \textbf{function\_t} is a complex type consisting of three \textbf{double} values.
+  Therefore, the size of an instance of that struct is 24bytes.
+  While that doesn't sound like a lot in today's computing, it is a big deal for something like embedded devices which probably only feature a few kilo bytes of memory.
+  This brings me directly to the reason why the first two parameters are pointers: to avoid copying!
+  \\Copying the struct instance has the benefit that the function cannot change any value inside the original.
+  But the main downside is the fact that we have to copy a complex type which uses quite some memory.
+  A pointer to a struct still uses some memory, but it is way less than a copy would use.
+  Since a pointer simply represents a 32bit memory address, its size is (obviously) only 4 bytes.
+  \\The last parameter - \textbf{func\_result} - is an output parameter.
+  Thanks to that pointer, the function itself does not have to worry about the allocation of the memory for the result.
+  But it also has an important benefit in regard to speed and memory management.
+  It allows you to use the memory you allocated on the stack.
+  This results not just in a faster memory allocation, but you also don't have to worry about the freeing of the allocated memory!
   \subsection{Using Referenced Memory}
+  \label{chap:using-referenced-memory}
   Let's implement a function to subtract one mathematical function (a function in form: $a2 * x^2 + a1 * x + a0$) from another one.
   \lstinputlisting{example-output-parameter.c}
   In the example, all parameters of the function \textbf{subtract\_functions} are pointers to instances of the \textbf{function\_t} struct.
@@ -124,21 +135,57 @@ int main() {
   But the way we access the members is not that nice.
   That is the reason why you normally use the arrow operator (->) instead.
   It de-references the struct instance and allows you to access its members as shown in line 8 and 9.
-  \subsection{Why Pointers As Parameters?}
-  As seen in the code example, \textbf{function\_t} is a complex type consisting of three \textbf{double} values.
-  Therefore, the size of an instance of that struct is 24bytes.
-  While that doesn't sound like a lot in today's computing, it is a big deal for something like embedded devices which probably only feature a few kilo bytes of memory.
-  This brings me directly to the reason why the first two parameters are pointers: to avoid copying!
-  \\Copying the struct instance has the benefit that the function cannot change any value inside the original.
-  But the main downside is the fact that we have to copy a complex type which uses quite some memory.
-  A pointer to a struct still uses some memory, but it is way less than a copy would use.
-  Since a pointer simply represents a 32bit memory address, its size is (obviously) only 4 bytes.
-  \\The last parameter - \textbf{func\_result} - is an output parameter.
-  Thanks to that pointer, the function itself does not have to worry about the allocation of the memory for the result.
-  But it also has an important benefit in regard to speed and memory management.
-  It allows you to use the memory you allocated on the stack.
-  This results not just in a faster memory allocation, but you also don't have to worry about the freeing of the allocated memory!
-  \section{Some Edge Use Cases Of Pointers}
+  \newpage
+  \subsubsection{Referencing Stack Memory}
+  \label{chap:referencing-stack-memory}
+  So, if we do not want to copy a struct instance, why don't we just create the instance on the stack of \textbf{subtract\_functions} and return a pointer to that instance?
+  Shouldn't that make use of the fast stack allocation speed and avoid copying?
+  \\[.2cm]
+  Well yes, but actually no.
+  \\In fact, working with memory like that will introduce plenty of issues.
+  \lstinputlisting{example-referencing-stack.c}
+  Whilst the code in the example is correct from a syntactical point of view, it will basically fail every time it is run.
+  The reason lies in the popping mechanism of the stack described in \autoref{chap:stack}.
+  As soon as the the call of \textbf{get\_referenced\_int} returns, all of its allocated stack memory will be freed.
+  That freeing will cause the returned reference to become invalid.
+  As a consequence, usage of the pointer (like in \textbf{line 10}) will result in a segmentation fault.
+  \subsubsection{Segmentation Fault}
+  The memory areas described in \autoref{chap:memory-areas} are also called segments.
+  Now, why does that error occur in the previous example?
+  \\In general, segmentation fault are caused by reads of/writes to memory locations, which are not owned by our program.
+  
+  
+  \subsection{What About Arrays?}
+  To put it simple: an array is basically the same as a pointer.
+  Regardless of the way you allocate them, arrays are always one consecutive block of memory.
+  Therefore, you can just apply pointer arithmetic to them.
+  \begin{lstlisting}
+int main() {
+  int a[] = { 1, 2, 3 }; // a=0x800
+  int* b  = &a[1];       // b=0x804
+  int c   = b[-1];       // c=1
+}
+  \end{lstlisting}
+  The bracket ([]) operator serves the same purpose as the arrow operator (->), but it takes an additional parameter: the location in the array you want to de-reference.
+  \textbf{Line 3} shows how we can access the second element of array \textbf{a}.
+  But how does the bracket operator know the memory address it has to fetch?
+  More or less like the following: we take the starting address of the array (\textbf{a}), multiply the given index by the size of the pointer's data type and add up these numbers.
+  So, if we wanted to perform this operation manually, we need to define three things:
+  \begin{itemize}
+    \item \textit{i} - as the index wen want to access
+    \item \textit{data} - as a \textbf{void*} to the data we want to access
+    \item \textit{T} - as the type of the data we want to access
+  \end{itemize}
+  With that said, the manual access looks like the following:
+  \begin{center}
+    $*((\textit{T}*)(\textit{data} + sizeof(\textit{T}) * \textit{i}))$
+  \end{center}
+  In the last chapter, you will find a larger example of array allocation and usage in the file \textbf{example-array.c}.
+  % TODO
+  % \subsubsection{Multidimensional Arrays}
+  
+  \newpage
+  \section{Some Interesting Ways Of Using Pointers}
   Let me just throw a piece of code at you:
   \lstinputlisting{example-punning.c}
   It may look complicated, but you just have to remember one thing: a pointer is a memory address.
@@ -152,19 +199,18 @@ int main() {
   Let's say we would like to create a generic way of doubling the length of vectors in the $n^t$$^h$ dimension.
   So our function would probably take an \textbf{int*} for the points and an \textbf{int} for the count of points as its parameters.
   Since we now know how to transform a struct (only consisting of members of the same type) into a pointer, we can just pass the faked pointer of our vector along with the number of points into the function and it will apply the doubling operation on all values of the point.
+  \newpage
   \section{Conclusion}
   So, what actually is a pointer now?
   A pointer is nothing more than a memory address.
   That's it.
   \\For what are they used?
-  To reference a certain location in memory.
-  \\What does that mean?
-  Well, that depends entirely on what you want to do.
+  Pointers are used to specify the location of some data of a given data type in memory.
+  \\Pointers on their own are a very simple concept.
+  But due to their simplicity, they are not really expressive and often hide their specific intent for beginners in C or similar languages.
   
-  \section{Copyright}
-  Copyright \textcopyright \enspace2019 J\"orn Neumeyer\\
-  Unless specified otherwise, the content of this article is licensed under the \href{https://creativecommons.org/licenses/by-sa/4.0/legalcode}{Creative Commons Attribution-ShareAlike 4.0 International Public License}.
-  You may modify, copy, distribute, and display this material, but you must give credit to the original authors. Please see the license for details.
+  \newpage
   \section{Source File Content}
   \lstinputlisting{example-stack.c}
+  \lstinputlisting{example-array.c}
 \end{document}
