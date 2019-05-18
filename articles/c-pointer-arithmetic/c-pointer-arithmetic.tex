@@ -178,7 +178,7 @@ int main() {
   \end{itemize}
   With that said, the manual access looks like the following:
   \begin{center}
-    $*((\textit{T}*)(\textit{data} + sizeof(\textit{T}) * \textit{i}))$
+    $*((\textit{T}*)(\textit{data} + sizeof(\textit{T}) \cdot \textit{i}))$
   \end{center}
   In the last chapter, you will find a larger example of array allocation and usage in the file \textbf{example-array.c}.
   % TODO
@@ -208,6 +208,9 @@ int main() {
   Pointers are used to specify the location of some data of a given data type in memory.
   \\Pointers on their own are a very simple concept.
   But due to their simplicity, they are not really expressive and often hide their specific intent for beginners in C or similar languages.
+  
+  \newpage
+  \section{Contributors}
   
   \newpage
   \section{Source File Content}
