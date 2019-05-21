@@ -1,5 +1,47 @@
 \documentclass{article}
 
-\begin{document}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{courier}
+\usepackage[left=50px,right=20px,top=10px,bottom=10px]{geometry}
+\usepackage[T1]{fontenc}
 
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+
+\author{J\"orn Neumeyer}
+
+\title{C/C++ Memory Allocation}
+
+\definecolor{darkturquoise}{rgb}{0.0, 0.81, 0.82}
+\definecolor{gray}{rgb}{0.5, 0.5, 0.5}
+\definecolor{bostonuniversityred}{rgb}{0.8, 0.0, 0.0}
+\definecolor{orangepeel}{rgb}{1.0, 0.62, 0.0}
+
+\lstset{
+  basicstyle=\ttfamily,
+  language={C},
+  numbers=left,
+  numbersep=5pt,
+  title=\lstname,
+  stringstyle=\color{red},
+  showspaces=false,
+  showstringspaces=false,
+  morecomment=[l][\color{magenta}]{\#},
+  directivestyle=\color{green},
+  commentstyle=\color{gray},
+  keywordstyle=\color{blue},
+  classoffset=0,
+  % morekeywords={@property,@synthesize,super},
+  classoffset=1,
+  morekeywords={},
+  keywordstyle=\color{darkturquoise},
+}
+
+\begin{document}
+  \maketitle
+  Copyright \textcopyright \enspace2019 J\"orn Neumeyer\\
+  Unless specified otherwise, the content of this article is licensed under the \href{https://creativecommons.org/licenses/by-sa/4.0/legalcode}{Creative Commons Attribution-ShareAlike 4.0 International Public License}.
+  You may modify, copy, distribute, and display this material, but you must give credit to the original authors. Please see the license for details.
+  \tableofcontents
 \end{document}
