@@ -1,2 +1,3 @@
 sierra.min.css linguist-vendored
 build-tex.sh linguist-vendored
+articles/* linguist-vendored
