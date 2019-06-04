@@ -1,5 +1,5 @@
 #!/bin/bash
-: <<'BLOCK_COMMENT'
+: <<'COPYRIGHT_AND_LICENSE'
   Copyright (C) 2019 Jörn Neumeyer
 
   This file is part of joern-neumeyer.de.
@@ -16,7 +16,7 @@
 
   You should have received a copy of the GNU General Public License
   along with joern-neumeyer.de. If not, see <https://www.gnu.org/licenses/>.
-BLOCK_COMMENT
+COPYRIGHT_AND_LICENSE
 
 set -e
 
@@ -66,8 +66,9 @@ do
   build-article ${ARTICLE}
   cd ..
 done
+cd ..
 
-cd ../slides
+cd slides
 for SLIDE in ${SLIDES}
 do
   cd ${SLIDE}
