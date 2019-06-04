@@ -17,120 +17,105 @@
  * along with joern-neumeyer.de. If not, see <https://www.gnu.org/licenses/>.
 */
 
-(function(){
-  var articlesList = document.getElementById('articles-list');
+import { createElementWithAttributes, registerPageScript } from '../lib.js';
 
-  var renderArticle = function(article) {
-    var articleElement = document.createElement('div');
-    articleElement.classList.add('row');
+function renderArticle(article) {
+  const articleElement = document.createElement('div');
+  articleElement.classList.add('row');
 
-    /* var thumbnail = document.createElement('img');
-    thumbnail.alt = article.code;
-    thumbnail.src = 'articles/' + article.code + '/thumb.svg';
+  const articleTexts = document.createElement('div');
+  articleTexts.classList.add('col-sm-12');
+  // articleTexts.classList.add('col-sm-9');
 
-    var thumbnailContainer = document.createElement('div');
-    thumbnailContainer.classList.add('col-sm-3');
-    thumbnailContainer.appendChild(thumbnail); */
+  const articleHeading = createElementWithAttributes('p', {
+    innerText: article.title,
+    className: 'section-heading row col'
+  });
 
-    var articleTexts = document.createElement('div');
-    articleTexts.classList.add('col-sm-12');
-    // articleTexts.classList.add('col-sm-9');
+  const articleDescription = createElementWithAttributes('p', {
+    innerText: article.description,
+    className: 'row col'
+  });
 
-    var articleHeading = createElementWithAttributes('p', {
-      innerText: article.title,
-      className: 'section-heading row col'
-    });
+  const downloadLinks = createElementWithAttributes('span', {
+    innerHTML: 'Download links:&nbsp;',
+    className: 'row col',
+  });
 
-    var articleDescription = createElementWithAttributes('p', {
-      innerText: article.description,
-      className: 'row col'
-    });
+  const articleDownloadTex = createElementWithAttributes('a', {
+    target: '_blank',
+    rel: 'noreferrer',
+    innerText: 'Download LaTeX Source',
+    href: '/articles/' + article.code + '/' + article.code + '.tex',
+    className: 'button button--primary button--small',
+  });
 
-    var downloadLinks = createElementWithAttributes('span', {
-      innerHTML: 'Download links:&nbsp;',
-      className: 'row col',
-    });
+  const articleDownloadPdf = createElementWithAttributes('a', {
+    target: '_blank',
+    rel: 'noreferrer',
+    innerText: 'Download PDF',
+    href: '/articles/' + article.code + '/' + article.code + '.pdf',
+    className: 'button button--primary button--small',
+  });
 
-    var articleDownloadTex = createElementWithAttributes('a', {
+  downloadLinks.appendChild(articleDownloadPdf);
+  downloadLinks.appendChild(articleDownloadTex);
+
+  if (article.bundle_available) {
+    const articleDownloadZip = createElementWithAttributes('a', {
       target: '_blank',
       rel: 'noreferrer',
-      innerText: 'Download LaTeX Source',
-      href: '/articles/' + article.code + '/' + article.code + '.tex',
+      innerText: 'Download Article ZIP bundle',
+      href: '/articles/' + article.code + '/' + article.code + '.zip',
       className: 'button button--primary button--small',
     });
-
-    var articleDownloadPdf = createElementWithAttributes('a', {
-      target: '_blank',
-      rel: 'noreferrer',
-      innerText: 'Download PDF',
-      href: '/articles/' + article.code + '/' + article.code + '.pdf',
-      className: 'button button--primary button--small',
-    });
-
-    downloadLinks.appendChild(articleDownloadPdf);
-    downloadLinks.appendChild(articleDownloadTex);
-
-    if (article.bundle_available) {
-      var articleDownloadZip = createElementWithAttributes('a', {
-        target: '_blank',
-        rel: 'noreferrer',
-        innerText: 'Download Article ZIP bundle',
-        href: '/articles/' + article.code + '/' + article.code + '.zip',
-        className: 'button button--primary button--small',
-      });
-      downloadLinks.appendChild(articleDownloadZip);
-    }
-
-    var lastBuild = createElementWithAttributes('span', {
-      innerHTML: 'Last build: ' + article.buildInfo.build_time.toLocaleDateString() + ' ' + article.buildInfo.build_time.toLocaleTimeString()
-    });
-
-    articleTexts.appendChild(articleHeading);
-    articleTexts.appendChild(articleDescription);
-    articleTexts.appendChild(downloadLinks);
-    articleTexts.appendChild(lastBuild);
-
-    // articleElement.appendChild(thumbnailContainer);
-    articleElement.appendChild(articleTexts);
-
-    return articleElement;
+    downloadLinks.appendChild(articleDownloadZip);
   }
 
+  const lastBuild = createElementWithAttributes('span', {
+    innerHTML: 'Last build: ' + article.buildInfo.build_time.toLocaleDateString() + ' ' + article.buildInfo.build_time.toLocaleTimeString()
+  });
+
+  articleTexts.appendChild(articleHeading);
+  articleTexts.appendChild(articleDescription);
+  articleTexts.appendChild(downloadLinks);
+  articleTexts.appendChild(lastBuild);
+
+  articleElement.appendChild(articleTexts);
+
+  return articleElement;
+}
+
+function loadAndRenderArticles() {
+  const articlesList = document.getElementById('articles-list');
+
   fetch('/articles/articles.json')
-    .then(function(response){
-      return response.json();
-    })
-    .then(function(articles) {
-      return Promise.all(
-        articles.map(function(article) {
-          return fetch('/articles/' + article.code + '/build-info.json')
-          .then(function(response) {
-            return response.json();
-          })
-          .then(function(buildInfo) {
-            buildInfo.build_time = new Date(buildInfo.build_time);
-            article.buildInfo = buildInfo;
-            return article;
-          });
-        }
-      ))
-    })
-    .then(function(articles) {
-      articles.forEach(function(article, i) {
-        var renderedArticle = renderArticle(article);
+    .then(response => response.json())
+    .then(articles => Promise.all(
+      articles.map(article => fetch('/articles/' + article.code + '/build-info.json')
+        .then(response => response.json())
+        .then(buildInfo => {
+          buildInfo.build_time = new Date(buildInfo.build_time);
+          article.buildInfo = buildInfo;
+          return article;
+        })
+      )
+    )
+      .then(articles => articles.forEach((article, i) => {
+        const renderedArticle = renderArticle(article);
         articlesList.appendChild(renderedArticle);
         if (i < articles.length - 1) {
-          var hr = document.createElement('hr');
+          const hr = document.createElement('hr');
           articlesList.appendChild(hr);
         }
-      });
-    })
-    .catch(function(e) {
-      console.error(e);
-      var errorElemenr = createElementWithAttributes('p', {
-        innerHTML: 'Could not load any articles. Perhaps the server wen down?'
-      });
+      }))
+      .catch(e => {
+        console.error(e);
+        const errorElement = createElementWithAttributes('p', {
+          innerHTML: 'Could not load any articles. Perhaps the server is down?'
+        });
+        articlesList.appendChild(errorElement);
+      }));
+}
 
-      articlesList.appendChild(errorElemenr);
-    });
-})();
+registerPageScript('articles', loadAndRenderArticles);
