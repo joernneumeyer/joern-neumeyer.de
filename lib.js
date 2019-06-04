@@ -17,31 +17,48 @@
  * along with joern-neumeyer.de. If not, see <https://www.gnu.org/licenses/>.
 */
 
-function upperCaseFirst(text) {
+export function upperCaseFirst(text) {
   return text[0].toUpperCase() + text.substring(1);
 }
 
-function getPageFragment() {
+export function getPageFragment() {
   return window.location.hash.substring(1);
 }
 
-function setPageFragment(fragment) {
+export function setPageFragment(fragment) {
   window.location.hash = '#' + fragment;
 }
 
-function setPageTitle(title) {
+export function setPageTitle(title) {
   document.getElementsByTagName('title')[0].innerHTML = title;
 }
 
-function createElementWithAttributes(elementName, attributes) {
-  var resultElement = document.createElement(elementName);
-  for (var name in attributes) {
+export function createElementWithAttributes(elementName, attributes) {
+  const resultElement = document.createElement(elementName);
+  for (const name in attributes) {
     resultElement[name] = attributes[name];
   }
   return resultElement;
 }
 
-function clickNavItem(fragment) {
-  var linkId = 'nav-link-' + fragment;
+export function clickNavItem(fragment) {
+  const linkId = 'nav-link-' + fragment;
   document.getElementById(linkId).click();
+}
+
+export function delay(ms) {
+  return new Promise(res => {
+    setTimeout(res, ms);
+  });
+}
+
+const pageScripts = { };
+
+export function registerPageScript(page, handler) {
+  pageScripts[page] = () => delay().then(handler);
+  pageScripts[page]();
+}
+
+export function getPageScript(page) {
+  return pageScripts[page];
 }
