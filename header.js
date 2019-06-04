@@ -17,74 +17,58 @@
  * along with joern-neumeyer.de. If not, see <https://www.gnu.org/licenses/>.
 */
 
-document.addEventListener('DOMContentLoaded', function(){
-  var headerList = document.getElementById('header-list');
-  var mainElement = document.getElementsByTagName('main')[0];
-  var initialLoad = true;
+import {
+  createElementWithAttributes,
+  getPageFragment,
+  getPageScript,
+  setPageFragment,
+  setPageTitle
+} from '/lib.js';
 
-  var cache = { };
+document.addEventListener('DOMContentLoaded', () => {
+  const headerList = document.getElementById('header-list');
+  const mainElement = document.getElementsByTagName('main')[0];
+  let initialLoad = true;
 
-  var clickHandlerFactory = function(page) {
-    return function() {
-      if (page.code === getPageFragment() && !initialLoad) return;
-      document.getElementById('nav-link-' + getPageFragment()).classList.remove('is-selected');
-      document.getElementById('nav-link-' + page.code).classList.add('is-selected');
-      setPageFragment(page.code);
-      setPageTitle(this.innerText + ' - J&ouml;rn Neumeyer');
-      var pageUrl = 'pages/' + page.code + '.html';
-      (
-        cache.hasOwnProperty(pageUrl)
-        ? Promise.resolve(cache[pageUrl])
+  const htmlCache = {};
+
+  const clickHandlerFactory = page => function () {
+    if (page.code === getPageFragment() && !initialLoad) return;
+    document.getElementById('nav-link-' + getPageFragment()).classList.remove('is-selected');
+    document.getElementById('nav-link-' + page.code).classList.add('is-selected');
+    setPageFragment(page.code);
+    setPageTitle(this.innerText + ' - J&ouml;rn Neumeyer');
+    const pageUrl = 'pages/' + page.code + '.html';
+    (
+      htmlCache.hasOwnProperty(pageUrl)
+        ? Promise.resolve(htmlCache[pageUrl])
         : fetch(pageUrl)
-      ).then(function(response) {
-        if (typeof response === 'string') {
-          return response;
+    )
+      .then((response) => typeof response === 'string' ? response : response.text())
+      .then((html) => {
+        if (!htmlCache.hasOwnProperty(pageUrl)) {
+          htmlCache[pageUrl] = html;
         }
-        return response.text();
-      }).then(function(html) {
-        if (!cache.hasOwnProperty(pageUrl)) {
-          cache[pageUrl] = html;
-        }
-
         mainElement.innerHTML = html;
-        var scriptUrl = 'pages/' + page.code + '.js';
-        (
-          cache.hasOwnProperty(scriptUrl)
-          ? Promise.resolve(cache[scriptUrl])
-          : fetch(scriptUrl)
-        )
-        .then(function(response) {
-          if (typeof response === 'string') {
-            return response;
-          }
-          if (response.status === 404) {
-            throw undefined;
-          }
-          return response.text();
-        })
-        .then(function(script) {
-          eval(script);
-          if (!cache.hasOwnProperty(scriptUrl)) {
-            cache[scriptUrl] = script;
-          }
-        })
-        .catch(function(error){
-          if (error === undefined) {
-            if (!cache.hasOwnProperty(scriptUrl)) {
-              cache[scriptUrl] = '';
-            }
-            // console.info('did not find a script for page ' + page.code);
-          } else {
-            console.error('Error while loading script for "' + page.code + '"');
-            throw error;
-          }
-        });
+        const scriptHandler = getPageScript(page.code);
+        if (scriptHandler) {
+          scriptHandler();
+          return;
+        }
+        const scriptUrl = 'pages/' + page.code + '.js';
+        fetch(scriptUrl)
+          .then(() => {
+            const pageScript = createElementWithAttributes('script', {
+              type: 'module',
+              src: scriptUrl
+            });
+            mainElement.appendChild(pageScript);
+          }).catch(() => { });
       });
-    };
   };
 
-  var mapPageInfoToLink = function(page) {
-    var anchor = document.createElement('a');
+  function mapPageInfoToLink(page) {
+    const anchor = document.createElement('a');
     anchor.innerText = page.title;
     anchor.classList.add('tabs-item');
     anchor.classList.add('clickable');
@@ -93,20 +77,12 @@ document.addEventListener('DOMContentLoaded', function(){
     return anchor;
   };
 
-  var makeSpacingSpan = function() {
-    var span = document.createElement('span');
-    span.innerHTML = '&nbsp;';
-    return span;
-  };
-
   fetch('/pages/pages.json')
-    .then(function(response) {
-      return response.json()
-    })
-    .then(function(pages) {
+    .then(response => response.json())
+    .then(pages => {
       pages
         .map(mapPageInfoToLink)
-        .forEach(function(link, i) {
+        .forEach(function (link, i) {
           /* var linkWrapper = createElementWithAttributes('div', {
             className: 'col'
           });
@@ -116,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
       setPageFragment(getPageFragment() || 'home');
 
-      var linkId = 'nav-link-' + (getPageFragment() || 'home');
+      const linkId = 'nav-link-' + (getPageFragment() || 'home');
       document.getElementById(linkId).click();
       initialLoad = false;
     });
