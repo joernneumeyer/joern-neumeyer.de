@@ -86,36 +86,36 @@ function renderArticle(article) {
   return articleElement;
 }
 
+const articlesPromise = fetch('/articles/articles.json')
+  .then(response => response.json())
+  .then(articles => Promise.all(
+    articles.map(article => fetch('/articles/' + article.code + '/build-info.json')
+      .then(response => response.json())
+      .then(buildInfo => {
+        buildInfo.build_time = new Date(buildInfo.build_time);
+        article.buildInfo = buildInfo;
+        return article;
+      })
+    )
+  ));
+
 function loadAndRenderArticles() {
   const articlesList = document.getElementById('articles-list');
-
-  fetch('/articles/articles.json')
-    .then(response => response.json())
-    .then(articles => Promise.all(
-      articles.map(article => fetch('/articles/' + article.code + '/build-info.json')
-        .then(response => response.json())
-        .then(buildInfo => {
-          buildInfo.build_time = new Date(buildInfo.build_time);
-          article.buildInfo = buildInfo;
-          return article;
-        })
-      )
-    )
-      .then(articles => articles.forEach((article, i) => {
-        const renderedArticle = renderArticle(article);
-        articlesList.appendChild(renderedArticle);
-        if (i < articles.length - 1) {
-          const hr = document.createElement('hr');
-          articlesList.appendChild(hr);
-        }
-      }))
-      .catch(e => {
-        console.error(e);
-        const errorElement = createElementWithAttributes('p', {
-          innerHTML: 'Could not load any articles. Perhaps the server is down?'
-        });
-        articlesList.appendChild(errorElement);
-      }));
+  articlesPromise.then(articles => articles.forEach((article, i) => {
+    const renderedArticle = renderArticle(article);
+    articlesList.appendChild(renderedArticle);
+    if (i < articles.length - 1) {
+      const hr = document.createElement('hr');
+      articlesList.appendChild(hr);
+    }
+  }))
+    .catch(e => {
+      console.error(e);
+      const errorElement = createElementWithAttributes('p', {
+        innerHTML: 'Could not load any articles. Perhaps the server is down?'
+      });
+      articlesList.appendChild(errorElement);
+    });
 }
 
 registerPageScript('articles', loadAndRenderArticles);
