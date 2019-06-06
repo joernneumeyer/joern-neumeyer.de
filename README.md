@@ -17,5 +17,5 @@ A copy of this license can be found in __LICENSE__.
 
 ## Notices
 `sierra.min.css` is the minified CSS of the [Sierra library](https://sierra-library.github.io/), licensed under GPL-2.0-or-later.
-No copyright notices were found in the source code.
+No copyright notices were found in the source code ([PR #69 pending](https://github.com/sierra-library/sierra/pull/69)).
 Main contributors on GitHub: [JoanClaret](https://github.com/JoanClaret), [maraisr](https://github.com/maraisr)
