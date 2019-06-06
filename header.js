@@ -21,6 +21,7 @@ import {
   createElementWithAttributes,
   getPageFragment,
   getPageScript,
+  registerPageScript,
   setPageFragment,
   setPageTitle
 } from '/lib.js';
@@ -57,7 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const scriptUrl = 'pages/' + page.code + '.js';
         fetch(scriptUrl)
-          .then(() => {
+          .then(response => {
+            if (response.status !== 200) {
+              registerPageScript(page.code, () => { });
+              return;
+            }
             const pageScript = createElementWithAttributes('script', {
               type: 'module',
               src: scriptUrl
